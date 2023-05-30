@@ -1,0 +1,47 @@
+{-
+    contracts.fc
+
+    This library simply the creation and call of external contracts.
+-}
+
+([cell, cell, cell, slice]) contracts::empty() inline {
+    return [null(), null(), null(), null()];
+}
+
+([cell, cell, cell, slice]) contracts::from_address(slice _addr) inline {
+    return [null(), null(), null(), _addr];
+}
+
+([cell, cell, cell, slice]) contracts::from_sources(cell data, cell code) inline {
+    return [code, data, null(), null()];
+}
+
+([cell, cell, cell, slice], cell) state_init([cell, cell, cell, slice] cntr) inline_ref {
+    [cell _code?, cell _data?, cell _state_init?, slice _addr?] = cntr; 
+
+    if _state_init?.null?() {
+        _state_init? = begin_cell()
+            .store_uint(0, 1 + 1)   ;; No split depth; No TickTock
+            .store_dict(_code?)     ;; Code
+            .store_dict(_data?)     ;; Data
+            .store_uint(0, 1)       ;; Empty libraries
+        .end_cell();
+    }
+
+    return ([_code?, _data?, _state_init?, _addr?], _state_init?);
+}
+
+([cell, cell, cell, slice], slice) address([cell, cell, cell, slice] cntr, int workchain) inline_ref {
+    [cell _code?, cell _data?, cell _state_init?, slice _addr?] = cntr; 
+
+    if _addr?.null?() {
+        (_, _state_init?) = cntr.state_init();
+        _addr? = begin_cell().store_uint(4, 3) ;; 0b100 = addr_std$10 tag; No anycast
+            .store_int(workchain, 8)
+            .store_uint(cell_hash(_state_init?), 256)
+        .end_cell().begin_parse();
+    }
+
+    return ([_code?, _data?, _state_init?, _addr?], _addr?);
+}
+

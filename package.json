@@ -1,0 +1,15 @@
+{
+  "name": "@ston-fi/funcbox",
+  "version": "0.0.3",
+  "description": "Collection of FunC snippets/utilities",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ston-fi/funcbox.git"
+  },
+  "homepage": "https://github.com/ston-fi/funcbox#readme",
+  "keywords": [
+    "smartcontracts",
+    "defi"
+  ]
+}

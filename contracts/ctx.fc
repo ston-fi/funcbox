@@ -1,0 +1,45 @@
+{-
+    ctx.fc
+
+    This library helps to manage call context for incoming messages. 
+-}
+
+const IS_BOUNCED = 0;
+const SENDER = 1;
+const FWD_FEE = 2;
+const OPCODE = 3;
+const QUERY_ID = 4;
+const BALANCE = 5;
+const MSG_VALUE = 6;
+const BODY = 7;
+const RAW_MSG = 8;
+
+global tuple ctx;
+
+() ctx::init(int _my_balance, int _msg_value, cell _in_msg_full, slice _in_msg_body) impure inline {
+    slice cs = _in_msg_full.begin_parse();
+    int flags = cs~load_uint(4);
+
+    int _is_bounced = false;
+    if flags & 1 {
+        _is_bounced = true;
+    }
+
+    slice _sender_address = cs~load_msg_addr();
+    cs~load_msg_addr();
+    cs~load_coins();
+    cs~skip_bits(1);
+    cs~load_coins();
+
+    ctx = _unsafe_tuple([
+            _is_bounced,
+            _sender_address,
+            muldiv(cs~load_coins(), 3, 2),
+            _in_msg_body~load_uint(32),
+            _in_msg_body~load_uint(64),
+            _my_balance,
+            _msg_value,
+            _in_msg_body,
+            _in_msg_full
+        ]);
+}

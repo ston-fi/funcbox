@@ -1,0 +1,26 @@
+{-
+    stdlib-ext.fc
+
+    Additional functions that are not present in stdlib.fc
+-}
+
+(int) mod (int x, int y) asm "MOD";
+(int) divc (int x, int y) asm "DIVC";
+slice preload_bits_offset(slice s, int offset, int len) asm "SDSUBSTR";
+int builder_null?(builder b) asm "ISNULL";
+(slice, slice) load_slice_ref(slice s) asm "LDREFRTOS";
+forall X -> int to_int(X x) asm "NOP";
+(slice, int) load_bool(slice b) inline asm "1 LDU SWAP 1 EQINT";
+(builder) store_bool(builder b, int v) inline asm " 0 NEQINT ABS SWAP 1 STU";
+slice addr_none() asm "<b b{00} s, b> <s PUSHSLICE";
+cell empty_cell() asm "<b b> PUSHREF";
+slice empty_slice() asm "<b b> <s PUSHSLICE";
+forall X -> tuple tset(tuple t, int k, X x) asm(t x k) "SETINDEXVAR";
+forall X -> (tuple, ()) ~tset(tuple t, int k, X x) asm(t x k) "SETINDEXVAR";
+forall X -> (tuple, X) tpop(tuple t) asm "TPOP";
+forall X -> (int) is_tuple(X t) asm "ISTUPLE";
+int tlen(tuple t) asm "TLEN";
+int tlenq(tuple t) asm "QTLEN";
+slice preload_slice_offset(slice s, int offset, int len) asm "SDSUBSTR";
+(slice, slice) load_slice(slice s, int len) asm( -> 1 0) "LDSLICEX";
+forall X -> tuple _unsafe_tuple(X x) asm "NOP";

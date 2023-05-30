@@ -1,0 +1,7 @@
+#include "contracts/stdlib.fc";
+#include "contracts/stdlib-ext.fc";
+#include "contracts/reserves.fc"; 
+#include "contracts/msgs.fc";
+#include "contracts/utils.fc";
+#include "contracts/contracts.fc";
+#include "contracts/ctx.fc";

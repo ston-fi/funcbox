@@ -1,0 +1,26 @@
+{-
+    reserves.fc
+
+    This library wraps around common modes in raw_reserve calls.
+
+    Usage: raw_reserve(specified_value | 0, mode); 
+    Modes available:
+    - RESERVE_EXACTLY                                                              = specified_value
+    - RESERVE_ALL_EXCEPT                                                           = remaining_balance - specified_value
+    - RESERVE_AT_MOST                                                              = min(specified_value, remaining_balance)
+    - RESERVE_AT_MOST + RESERVE_ALL_EXCEPT                                         = remaining_balance - min(specified_value, remaining_balance)
+    - BALANCE_INCREASED                                                            = original_balance + specified_value
+    - BALANCE_INCREASED + RESERVE_ALL_EXCEPT                                       = remaining_balance - (original_balance + specified_value)
+    - BALANCE_INCREASED + RESERVE_AT_MOST                                          = min(original_balance + specified_value, remaining_balance) = remaining_balance
+    - BALANCE_INCREASED + RESERVE_AT_MOST + RESERVE_ALL_EXCEPT                     = remaining_balance - min(original_balance + specified_value, remaining_balance)
+    - BALANCE_DECREASED + BALANCE_INCREASED                                        = original_balance - specified_value
+    - BALANCE_DECREASED + BALANCE_INCREASED + RESERVE_ALL_EXCEPT                   = remaining_balance - (original_balance - specified_value)
+    - BALANCE_DECREASED + BALANCE_INCREASED + RESERVE_AT_MOST                      = min(original_balance - specified_value, remaining_balance)
+    - BALANCE_DECREASED + BALANCE_INCREASED + RESERVE_AT_MOST + RESERVE_ALL_EXCEPT = remaining_balance - min(original_balance - specified_value, remaining_balance)
+-}
+const RESERVE_EXACTLY    = 0;
+const RESERVE_ALL_EXCEPT = 1;
+const RESERVE_AT_MOST    = 2;
+const EXTRN_DO_NOT_FAIL  = 2;
+const BALANCE_INCREASED  = 4;
+const BALANCE_DECREASED  = 8;
