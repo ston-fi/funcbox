@@ -1,5 +1,5 @@
 {-
-    stdlib-ext.fc
+    stdlib_ext.fc
 
     Additional functions that are not present in stdlib.fc
 -}
@@ -24,3 +24,4 @@ int tlenq(tuple t) asm "QTLEN";
 slice preload_slice_offset(slice s, int offset, int len) asm "SDSUBSTR";
 (slice, slice) load_slice(slice s, int len) asm( -> 1 0) "LDSLICEX";
 forall X -> tuple _unsafe_tuple(X x) asm "NOP";
+(slice) as_slice(builder b) asm "ENDC CTOS";

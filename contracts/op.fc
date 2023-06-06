@@ -1,0 +1,26 @@
+{-
+    op.fc
+
+    Common opcodes for standard contracts
+-}
+
+;; standard ft opcodes
+const int op::ft::transfer = 0xf8a7ea5;
+const int op::ft::transfer_notification = 0x7362d09c;
+const int op::ft::excesses = 0xd53276db;
+const int op::ft::burn = 0x595f07bc;
+
+;; standard ft discovery opcodes
+const int op::ft::provide_wallet_address = 0x2c76b973;
+const int op::ft::take_wallet_address = 0xd1735400;
+
+;; standard nft opcodes
+const int op::nft::transfer = 0x5fcc3d14;
+const int op::nft::ownership_assigned = 0x05138d91;
+const int op::nft::excesses = 0xd53276db;
+const int op::nft::get_static_data = 0x2fcb26a2;
+const int op::nft::report_static_data = 0x8b771735;
+
+;; standard nft royalty opcodes
+const int op::nft::get_royalty_params = 0x693d3950;
+const int op::nft::report_royalty_params = 0xa8cb00ad;

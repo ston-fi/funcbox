@@ -39,7 +39,7 @@
         _addr? = begin_cell().store_uint(4, 3) ;; 0b100 = addr_std$10 tag; No anycast
             .store_int(workchain, 8)
             .store_uint(cell_hash(_state_init?), 256)
-        .end_cell().begin_parse();
+        .as_slice();
     }
 
     return ([_code?, _data?, _state_init?, _addr?], _addr?);
