@@ -23,6 +23,7 @@ global tuple ctx;
     int _is_bounced = false;
     if flags & 1 {
         _is_bounced = true;
+        _in_msg_body~skip_bits(32); ;; 0xFFFFFFFF
     }
 
     slice _sender_address = cs~load_msg_addr();
