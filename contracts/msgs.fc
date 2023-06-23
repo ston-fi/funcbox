@@ -12,6 +12,10 @@ const DESTROY_IF_ZERO = 32;
 const CARRY_REMAINING_GAS = 64;
 const CARRY_ALL_BALANCE = 128;
 
+const QDESTROY_IF_ZERO = DESTROY_IF_ZERO | IGNORE_ERRORS;
+const QCARRY_REMAINING_GAS = CARRY_REMAINING_GAS | IGNORE_ERRORS;
+const QCARRY_ALL_BALANCE = CARRY_ALL_BALANCE | IGNORE_ERRORS;
+
 () msgs::send_empty(int amount, slice to, int mode) impure inline_ref {
     cell msg = begin_cell()
         .store_uint(0x18, 6)
