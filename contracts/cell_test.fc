@@ -1,0 +1,14 @@
+{-
+    cell_test.fc 
+
+    Tests for cell.fc
+-}
+
+_ test_cell::is_empty() impure inline {
+    assert("is_empty #0", cell::is_empty(begin_cell().end_cell()));
+    assert("is_empty #1", ~ cell::is_empty(begin_cell().store_uint(1, 1).end_cell()));
+}
+
+_ test_cell() impure inline_ref {
+    test_cell::is_empty();
+}

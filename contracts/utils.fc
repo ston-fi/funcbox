@@ -43,3 +43,22 @@ slice utils::address_to_hex_string(int value) inline {
         return final_cell.end_cell().begin_parse().preload_bits(512);
     }
 }
+
+slice utils::number_to_slice(int number) {
+    builder text_b = begin_cell();
+    if (number < 0) {
+        text_b = text_b.store_slice("-");
+        number = - number;
+    }
+    int len = 0;
+    int value = 0;
+    int mult = 1;
+    do {
+        (number, int res) = number.divmod(10);
+        value = value + (res + 48) * mult;
+        mult = mult * 256;
+        len = len + 1;
+    } until (number == 0);
+    slice text = text_b.store_uint(value, len * 8).end_cell().begin_parse();
+    return text;
+}

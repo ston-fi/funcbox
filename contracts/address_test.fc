@@ -1,0 +1,32 @@
+{-
+    address_test.fc 
+
+    Tests for address.fc
+-}
+
+_ test_address::is_none() impure inline {
+    assert("is_none #0", address::is_none(addr_none()));
+    assert("is_none #1", ~ address::is_none("EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c"a));
+}
+
+_ test_address::get_workchain() impure inline {
+    assert("get_workchain #0", address::get_workchain("EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c"a) == 0);
+    assert("get_workchain #1", address::get_workchain("Ef8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAU"a) == -1);
+}
+
+_ test_address::get_hashpart() impure inline {
+    assert("get_hashpart #0", address::get_hashpart("EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c"a) == 0);
+    assert("get_hashpart #1", address::get_hashpart("Ef8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAU"a) == 0);
+
+}
+
+_ test_address::serialize() impure inline {
+    assert("serialize #0", equal_slices(address::serialize(0, 0), "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c"a));
+}
+
+_ test_address() impure inline {
+    test_address::get_hashpart();
+    test_address::get_workchain();
+    test_address::is_none();
+    test_address::serialize();
+}

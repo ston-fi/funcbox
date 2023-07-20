@@ -1,0 +1,41 @@
+{-
+    consts.fc
+
+    Contants needed.
+-}
+
+;; Message modes. See ./msgs.fc for more
+
+;; MODIFIER
+const NORMAL = 0;
+const PAID_EXTERNALLY = 1;
+const IGNORE_ERRORS = 2;
+
+;; SEND MODES
+const DESTROY_IF_ZERO = 32;
+const CARRY_REMAINING_GAS = 64;
+const CARRY_ALL_BALANCE = 128;
+
+;; SEND MODES QUIETED
+const QDESTROY_IF_ZERO = 34;
+const QCARRY_REMAINING_GAS = 66;
+const QCARRY_ALL_BALANCE = 130;
+
+;; Contex index constants. See ./ctx.fc for more
+const IS_BOUNCED = 0;
+const SENDER = 1;
+const FWD_FEE = 2;
+const OPCODE = 3;
+const QUERY_ID = 4;
+const BALANCE = 5;
+const MSG_VALUE = 6;
+const BODY = 7;
+const RAW_MSG = 8;
+
+;; Raw reserves constants. See ./reserves.fc for more
+const RESERVE_EXACTLY    = 0;
+const RESERVE_ALL_EXCEPT = 1;
+const RESERVE_AT_MOST    = 2;
+const EXTRN_DO_NOT_FAIL  = 2;
+const BALANCE_INCREASED  = 4;
+const BALANCE_DECREASED  = 8;

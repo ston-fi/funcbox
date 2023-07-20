@@ -1,0 +1,23 @@
+{-
+    dump.fc
+
+    This library provide functions for dumping in console. 
+-}
+
+_ ~dump::string(slice text) impure {
+    slice text_extended = begin_cell()
+            .store_slice(text)
+            .as_slice();
+    ~strdump_safe_not_pretty(text_extended);
+}
+
+_ ~dump::int(int value) impure {
+    slice text_extended = begin_cell()
+            .store_slice(utils::number_to_slice(value))
+            .as_slice();
+    ~strdump_safe_not_pretty(text_extended);
+}
+
+_ ~dump::custom(slice sc) impure {
+    ~strdump_safe_not_pretty(sc);
+}

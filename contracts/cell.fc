@@ -1,0 +1,9 @@
+{-
+    cell.fc
+
+    This library provide functions for Cells. 
+-}
+
+(int) cell::is_empty(cell c) inline {
+    return c.cell_hash() == 68134197439415885698044414435951397869210496020759160419881882418413283430343;
+}

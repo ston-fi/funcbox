@@ -1,0 +1,9 @@
+#include "autoload.fc";
+#include "contracts/test/test.fc";
+
+_ main() impure { 
+    test_address();
+    test_math();
+    test_cell();
+    test_utils();
+}

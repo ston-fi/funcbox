@@ -1,0 +1,28 @@
+{-
+    address.fc
+
+    This library provide functions for MsgAddressInt type. 
+-}
+
+
+(int) address::is_none(slice addr) inline {
+    return equal_slices(addr, addr_none());
+}
+
+(int) address::get_workchain(slice addr) inline {
+    (int wc, _) = parse_std_addr(addr);
+    return wc;
+}
+
+(int) address::get_hashpart(slice addr) inline {
+    (_, int hp) = parse_std_addr(addr);
+    return hp;
+}
+
+(slice) address::serialize(int _wc, int _hp) inline {
+    return begin_cell()
+        .store_uint(4, 3) ;; 0b100 = addr_std$10 tag; No anycast
+        .store_int(_wc, 8)
+        .store_uint(_hp, 256)
+    .as_slice();
+}

@@ -1,8 +1,12 @@
 {
   "name": "@ston-fi/funcbox",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Collection of FunC snippets/utilities",
   "license": "MIT",
+  "scripts": {
+    "build": "npx func-js test_case.fc",
+    "test": "npx jest tests/TestCase.spec.ts"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ston-fi/funcbox.git"
@@ -11,5 +15,22 @@
   "keywords": [
     "smartcontracts",
     "defi"
-  ]
+  ],
+  "devDependencies": {
+    "@ton-community/blueprint": "^0.10.0",
+    "@ton-community/sandbox": "^0.11.0",
+    "@ton-community/test-utils": "^0.2.0",
+    "@ton-community/func-js": "^0.6.2",
+    "@types/jest": "^29.5.0",
+    "@ton/core": "^0.49.2",
+    "@ton/sandbox": "^0.11.0",
+    "@types/node": "^20.4.2",
+    "glob": "^10.3.3",
+    "ton": "^13.5.0",
+    "ton-crypto": "^3.2.0",
+    "ts-jest": "^29.0.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5",
+    "prettier": "^2.8.6"
+  }
 }

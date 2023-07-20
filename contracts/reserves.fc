@@ -18,9 +18,3 @@
     - BALANCE_DECREASED + BALANCE_INCREASED + RESERVE_AT_MOST                      = min(original_balance - specified_value, remaining_balance)
     - BALANCE_DECREASED + BALANCE_INCREASED + RESERVE_AT_MOST + RESERVE_ALL_EXCEPT = remaining_balance - min(original_balance - specified_value, remaining_balance)
 -}
-const RESERVE_EXACTLY    = 0;
-const RESERVE_ALL_EXCEPT = 1;
-const RESERVE_AT_MOST    = 2;
-const EXTRN_DO_NOT_FAIL  = 2;
-const BALANCE_INCREASED  = 4;
-const BALANCE_DECREASED  = 8;

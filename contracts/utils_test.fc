@@ -1,0 +1,20 @@
+{-
+    utils_test.fc 
+
+    Tests for utils.fc
+-}
+
+_ test_utils::address_to_hex_string() impure inline {
+    assert("address_to_hex_string #0", equal_slices(utils::address_to_hex_string(0), "0000000000000000000000000000000000000000000000000000000000000000"));
+}
+
+_ test_utils::number_to_slice() impure inline {
+    assert("number_to_slice #0", equal_slices(utils::number_to_slice(0), "0"));
+    assert("number_to_slice #1", equal_slices(utils::number_to_slice(10), "10"));
+    assert("number_to_slice #2", equal_slices(utils::number_to_slice(-10), "-10"));
+}
+
+_ test_utils() impure inline_ref {
+    test_utils::address_to_hex_string();
+    test_utils::number_to_slice(); 
+}

@@ -24,3 +24,6 @@ const int op::nft::report_static_data = 0x8b771735;
 ;; standard nft royalty opcodes
 const int op::nft::get_royalty_params = 0x693d3950;
 const int op::nft::report_royalty_params = 0xa8cb00ad;
+
+;; *not* standard but can be used, as long it uses same schema
+const int op::excesses = 0xd53276db;

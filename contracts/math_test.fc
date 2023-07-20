@@ -1,0 +1,14 @@
+{-
+    math_test.fc 
+
+    Tests for math.fc
+-}
+
+_ test_math::sqrt() impure inline {
+    assert("sqrt #0", math::sqrt(10000) == 100);
+    assert("sqrt #1", math::sqrt(1000) == 31);
+}
+
+_ test_math() impure inline {
+    test_math::sqrt();
+}

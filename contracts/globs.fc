@@ -1,0 +1,8 @@
+{-
+    globs.fc
+
+    Globals needed.
+-}
+
+;; Context. See ./ctx.fc for more
+global tuple ctx;
