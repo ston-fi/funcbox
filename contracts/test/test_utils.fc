@@ -4,16 +4,9 @@
     This library provide functions for writing tests. 
 -}
 
-_ assert(slice err, int cond) impure inline_ref {
+_ assert(slice err, int cond) impure inline {
     if ~ cond {
-        var errcode = begin_cell()
-            .store_slice(err)
-            .store_uint(0, 256)
-            .as_slice()
-            .preload_uint(256) % 16;
-        
         ~dump::string(err);
-        
-        throw(errcode);
+        throw(err.slice_hash() % 65497); ;; 2^16 - (38 + 1)
     }
 }

@@ -7,7 +7,7 @@ export function testCaseConfigToCell(config: TestCaseConfig): Cell {
 }
 
 export class TestCase implements Contract {
-    constructor(readonly address: Address, readonly init?: { code: Cell; data: Cell }) {}
+    constructor(readonly address: Address, readonly init?: { code: Cell; data: Cell }) { }
 
     static createFromAddress(address: Address) {
         return new TestCase(address);
@@ -23,7 +23,10 @@ export class TestCase implements Contract {
         await provider.internal(via, {
             value,
             sendMode: SendMode.PAY_GAS_SEPARATELY,
-            body: beginCell().endCell(),
+            body: beginCell()
+                .storeUint(0, 32)
+                .storeUint(0, 64)
+                .endCell(),
         });
     }
 }

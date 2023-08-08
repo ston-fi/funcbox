@@ -1,0 +1,16 @@
+{-
+    stdlib_ext_test.fc 
+
+    Tests for stdlib_ext.fc
+-}
+
+_ test_stdlib_ext::begin_message() impure inline {
+    assert("begin_message #0", begin_message(10).end_cell().cell_hash() ==
+        begin_cell().store_uint(10, 32).store_uint(ctx.at(QUERY_ID), 64).end_cell().cell_hash());
+    assert("begin_message #1", begin_message(12).end_cell().cell_hash() !=
+        begin_cell().store_uint(10, 32).store_uint(ctx.at(QUERY_ID), 64).end_cell().cell_hash());
+}
+
+_ test_stdlib_ext() impure inline_ref {
+    test_stdlib_ext::begin_message();
+}

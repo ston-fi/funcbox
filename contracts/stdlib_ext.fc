@@ -46,3 +46,4 @@ forall X -> tuple _unsafe_tuple(X x) asm "NOP";
 (builder) store_query_id(builder b, int t) inline asm(t b) "64 STU";
 forall X -> X ~strdump_safe_not_pretty(slice value) impure asm "STRDUMP";
 forall X -> X ~dump_safe(X value) impure asm "s0 DUMP";
+(builder) begin_message(int _opcode) asm "ctx GETGLOB 4 INDEX SWAP NEWC 32 STU 64 STU";

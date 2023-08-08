@@ -31,7 +31,7 @@ describe('TestCase', () => {
         });
     });
 
-    it('should deploy', async () => {
+    it('should run tests', async () => {
         // the check is done inside beforeEach
         // blockchain and testCase are ready to use
     });
