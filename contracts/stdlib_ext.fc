@@ -47,3 +47,5 @@ forall X -> tuple _unsafe_tuple(X x) asm "NOP";
 forall X -> X ~strdump_safe_not_pretty(slice value) impure asm "STRDUMP";
 forall X -> X ~dump_safe(X value) impure asm "s0 DUMP";
 (builder) begin_message(int _opcode) asm "ctx GETGLOB 4 INDEX SWAP NEWC 32 STU 64 STU";
+(slice, int) load_status(slice s) asm "8 LDU SWAP";
+(builder) store_status(builder b, int t) inline asm(t b) "8 STU";

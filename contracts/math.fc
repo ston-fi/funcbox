@@ -4,6 +4,13 @@
     This library provide functions for math. 
 -}
 
+const int math::MAX_UINT8   = 0xFF; 
+const int math::MAX_UINT16  = 0xFFFF; 
+const int math::MAX_UINT32  = 0xFFFFFFFF; 
+const int math::MAX_UINT64  = 0xFFFFFFFFFFFFFFFF; 
+const int math::MAX_UINT128 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; 
+const int math::MAX_UINT256 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; 
+
 int math::sqrt(int x) inline {
     if (x == 0) { return x; }
 

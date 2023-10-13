@@ -11,6 +11,14 @@ _ test_stdlib_ext::begin_message() impure inline {
         begin_cell().store_uint(10, 32).store_uint(ctx.at(QUERY_ID), 64).end_cell().cell_hash());
 }
 
+_ test_stdlib_ext::store_status() impure inline {
+    assert("store_status #0", begin_cell().store_status(0).end_cell().cell_hash() ==
+        begin_cell().store_uint(0, 8).end_cell().cell_hash());
+    assert("store_status #1",  begin_cell().store_status(1).end_cell().cell_hash() !=
+        begin_cell().store_uint(0, 8).end_cell().cell_hash());
+}
+
 _ test_stdlib_ext() impure inline_ref {
     test_stdlib_ext::begin_message();
+    test_stdlib_ext::store_status(); 
 }

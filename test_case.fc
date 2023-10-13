@@ -8,6 +8,7 @@
     test_math();
     test_cell();
     test_stdlib_ext();
+    test_time();
     
     return ();
 }

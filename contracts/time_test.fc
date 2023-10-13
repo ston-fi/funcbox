@@ -1,0 +1,81 @@
+{-
+    time_test.fc 
+
+    Tests for time.fc
+-}
+
+_ test_time::add_days() impure inline {
+    int ts = now();
+
+    (int out_ts, int res) = time::add_days(ts, 2);
+    assert("add_days #0", res);
+    assert("add_days #1", out_ts == ts + (2 * 24 * 60 * 60));
+
+    (out_ts, res) = time::add_days(ts, -1);
+    assert("add_days #2", ~ res);
+}
+
+_ test_time::add_hours() impure inline {
+    int ts = now();
+
+    (int out_ts, int res) = time::add_hours(ts, 2);
+    assert("add_hours #0", res);
+    assert("add_hours #1", out_ts == ts + (2 * 60 * 60));
+
+    (out_ts, res) = time::add_hours(ts, -1);
+    assert("add_hours #2", ~ res);
+}
+
+_ test_time::add_minutes() impure inline {
+    int ts = now();
+
+    (int out_ts, int res) = time::add_minutes(ts, 2);
+    assert("add_minutes #0", res);
+    assert("add_minutes #1", out_ts == ts + (2 * 60));
+
+    (out_ts, res) = time::add_minutes(ts, -1);
+    assert("add_minutes #2", ~ res);
+}
+
+_ test_time::sub_days() impure inline {
+    int ts = now();
+
+    (int out_ts, int res) = time::sub_days(ts, 2);
+    assert("sub_days #0", res);
+    assert("sub_days #1", out_ts == ts - (2 * 24 * 60 * 60));
+
+    (out_ts, res) = time::sub_days(ts, -1);
+    assert("sub_days #2", ~ res);
+}
+
+_ test_time::sub_hours() impure inline {
+    int ts = now();
+
+    (int out_ts, int res) = time::sub_hours(ts, 2);
+    assert("sub_hours #0", res);
+    assert("sub_hours #1", out_ts == ts - (2 * 60 * 60));
+
+    (out_ts, res) = time::sub_hours(ts, -1);
+    assert("sub_hours #2", ~ res);
+}
+
+_ test_time::sub_minutes() impure inline {
+    int ts = now();
+
+    (int out_ts, int res) = time::sub_minutes(ts, 2);
+    assert("sub_minutes #0", res);
+    assert("sub_minutes #1", out_ts == ts - (2 * 60));
+
+    (out_ts, res) = time::sub_minutes(ts, -1);
+    assert("sub_minutes #2", ~ res);
+}
+
+
+_ test_time() impure inline_ref {
+    test_time::add_days();
+    test_time::add_hours();
+    test_time::add_minutes();
+    test_time::sub_days();
+    test_time::sub_hours();
+    test_time::sub_minutes();
+}

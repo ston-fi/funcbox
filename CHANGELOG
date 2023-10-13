@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.0.9] - 2023-10-12
+
+### Added
+
+- Add `time` library (constants helpers and utilities)
+- Add constants values for max uint
+- Add status load/store functions
+- Add reserves library
+
 ## [0.0.8] - 2023-08-08
 
 ### Added
@@ -77,6 +86,7 @@
 
 - Add initial library release
 
+[0.0.9]: https://github.com/ston-fi/funcbox/tree/v0.0.9
 [0.0.8]: https://github.com/ston-fi/funcbox/tree/v0.0.8
 [0.0.7]: https://github.com/ston-fi/funcbox/tree/v0.0.7
 [0.0.6]: https://github.com/ston-fi/funcbox/tree/v0.0.6

@@ -18,3 +18,19 @@
     - BALANCE_DECREASED + BALANCE_INCREASED + RESERVE_AT_MOST                      = min(original_balance - specified_value, remaining_balance)
     - BALANCE_DECREASED + BALANCE_INCREASED + RESERVE_AT_MOST + RESERVE_ALL_EXCEPT = remaining_balance - min(original_balance - specified_value, remaining_balance)
 -}
+
+() reserves::max_balance(int _balance) impure inline_ref {
+    raw_reserve(
+        max(ctx.at(BALANCE) - ctx.at(MSG_VALUE), 
+            _balance
+        ), RESERVE_EXACTLY
+    );
+}
+
+() reserves::exact(int _balance) impure inline_ref {
+    raw_reserve(_balance, RESERVE_EXACTLY);
+}
+
+() reserves::before_tx() impure inline_ref {
+    raw_reserve(0, BALANCE_INCREASED);
+}

@@ -1,0 +1,39 @@
+{-
+    time.fc
+
+    This library simply the managment of time in contract.
+-}
+
+const time::SECONDS_PER_DAY = 86400; ;; 24 * 60 * 60
+const time::SECONDS_PER_HOUR = 3600; ;; 60 * 60
+const time::SECONDS_PER_MINUTE = 60;
+
+(int, int) time::add_days(int _ts, int _days) inline {
+    if _days < 0 { return (-1, false); }
+    return (_ts + (_days * time::SECONDS_PER_DAY), true);
+}
+
+(int, int) time::add_hours(int _ts, int _hours) inline {
+    if _hours < 0 { return (-1, false); }
+    return (_ts + (_hours * time::SECONDS_PER_HOUR), true);
+}
+
+(int, int) time::add_minutes(int _ts, int _minutes) inline {
+    if _minutes < 0 { return (-1, false); }
+    return (_ts + (_minutes * time::SECONDS_PER_MINUTE), true);
+}
+
+(int, int) time::sub_days(int _ts, int _days) inline {
+    if _days < 0 { return (-1, false); }
+    return (_ts - (_days * time::SECONDS_PER_DAY), true);
+}
+
+(int, int) time::sub_hours(int _ts, int _hours) inline {
+    if _hours < 0 { return (-1, false); }
+    return (_ts - (_hours * time::SECONDS_PER_HOUR), true);
+}
+
+(int, int) time::sub_minutes(int _ts, int _minutes) inline {
+    if _minutes < 0 { return (-1, false); }
+    return (_ts - (_minutes * time::SECONDS_PER_MINUTE), true);
+}

@@ -13,3 +13,5 @@
 #include "contracts/cell.fc"; 
 #include "contracts/dump.fc"; 
 #include "contracts/math.fc"; 
+#include "contracts/dump.fc"; 
+#include "contracts/time.fc"; 
