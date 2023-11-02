@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.0.10] - 2023-11-02
+
+### Added
+
+- Add new `math` functions: `pow`, `ln`, `exp` and `log` 
+- Add new `address` functions: `check_workchain` and `check_hashpart`
+- Add SBT NFT missing opcodes
+- Add additional wrapper for unsupported opcodes
+
 ## [0.0.9] - 2023-10-12
 
 ### Added
@@ -86,6 +95,7 @@
 
 - Add initial library release
 
+[0.0.10]: <https://github.com/ston-fi/funcbox/tree/v0.0.10
 [0.0.9]: https://github.com/ston-fi/funcbox/tree/v0.0.9
 [0.0.8]: https://github.com/ston-fi/funcbox/tree/v0.0.8
 [0.0.7]: https://github.com/ston-fi/funcbox/tree/v0.0.7

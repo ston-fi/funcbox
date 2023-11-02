@@ -19,6 +19,14 @@
     return hp;
 }
 
+(int) address::check_workchain(slice addr, int wc) inline {
+    return addr.address::get_workchain() == wc;
+}
+
+(int) address::check_hashpart(slice addr, int hp) inline {
+    return addr.address::get_hashpart() == hp;
+}
+
 (slice) address::serialize(int _wc, int _hp) inline {
     return begin_cell()
         .store_uint(4, 3) ;; 0b100 = addr_std$10 tag; No anycast

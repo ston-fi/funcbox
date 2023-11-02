@@ -49,3 +49,8 @@ forall X -> X ~dump_safe(X value) impure asm "s0 DUMP";
 (builder) begin_message(int _opcode) asm "ctx GETGLOB 4 INDEX SWAP NEWC 32 STU 64 STU";
 (slice, int) load_status(slice s) asm "8 LDU SWAP";
 (builder) store_status(builder b, int t) inline asm(t b) "8 STU";
+(int) negate(int _n) asm "NEGATE";
+(int) sub1(int _n) asm "DEC";
+(int) add1(int _n) asm "INC";
+(int) sgn(int _n) asm "SGN";
+(int) is_nan(int _n) asm "CHKNAN";

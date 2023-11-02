@@ -25,5 +25,15 @@ const int op::nft::report_static_data = 0x8b771735;
 const int op::nft::get_royalty_params = 0x693d3950;
 const int op::nft::report_royalty_params = 0xa8cb00ad;
 
+;; SBT
+const int op::sbt::request_owner = 0xd0c3bfea;
+const int op::sbt::owner_info = 0x0dd607e3;
+const int op::sbt::prove_ownership = 0x04ded148;
+const int op::sbt::ownership_proof = 0x0524c7ae;
+const int op::sbt::ownership_proof_bounced = 0xc18e86d2;
+const int op::sbt::destroy = 0x1f04537a;
+const int op::sbt::revoke = 0x6f89f5e3;
+const int op::sbt::take_excess = 0xd136d3b3;
+
 ;; *not* standard but can be used, as long it uses same schema
 const int op::excesses = 0xd53276db;
