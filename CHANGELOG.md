@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.0.11] - 2023-11-17
+
+### Added
+
+- Add `interfaces` lib: helper for `jetton` and `any` messages with builder support
+- Add `HOLE_ADDRESS` constant
+- Add new `msgs` lib helpers that accept builder, prefixed by `msgs::send_b*`
+- Add new math functions
+
+### Changed
+
+- Refactor `math` lib into two separate libs
+
 ## [0.0.10] - 2023-11-02
 
 ### Added
@@ -95,7 +108,8 @@
 
 - Add initial library release
 
-[0.0.10]: <https://github.com/ston-fi/funcbox/tree/v0.0.10
+[0.0.11]: https://github.com/ston-fi/funcbox/tree/v0.0.11
+[0.0.10]: https://github.com/ston-fi/funcbox/tree/v0.0.10
 [0.0.9]: https://github.com/ston-fi/funcbox/tree/v0.0.9
 [0.0.8]: https://github.com/ston-fi/funcbox/tree/v0.0.8
 [0.0.7]: https://github.com/ston-fi/funcbox/tree/v0.0.7

@@ -1,7 +1,7 @@
 #include "test_utils.fc";
 #include "../address_test.fc";
-#include "../math_test.fc";
 #include "../cell_test.fc";
 #include "../utils_test.fc";
 #include "../stdlib_ext_test.fc";
 #include "../time_test.fc";
+#include "../math/math_test.fc";

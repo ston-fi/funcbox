@@ -1,0 +1,36 @@
+{-
+    interfaces/jetton.fc 
+
+    Payload to interact with jettons.
+-}
+
+;; prefix is b, returns builder
+(builder) jetton_wallet::bsimple_transfer(
+    slice _to, 
+    int _jetton_amount, 
+    slice _response_address,
+    int _fwd_amount
+) inline {
+    return begin_message(op::ft::transfer)
+        .store_coins(_jetton_amount)
+        .store_slice(_to) ;; to_owner_address
+        .store_slice(_response_address) ;; responseAddress
+        .store_uint(0, 1)
+        .store_coins(_fwd_amount); ;; forward_ton_amount
+}
+
+(cell) jetton_wallet::simple_transfer(
+    slice _to, 
+    int _jetton_amount, 
+    slice _response_address,
+    int _fwd_amount
+) inline {
+    return begin_message(op::ft::transfer)
+        .store_coins(_jetton_amount)
+        .store_slice(_to) ;; to_owner_address
+        .store_slice(_response_address) ;; responseAddress
+        .store_uint(0, 1)
+        .store_coins(_fwd_amount) ;; forward_ton_amount
+        .store_uint(0, 1)
+        .end_cell();
+}

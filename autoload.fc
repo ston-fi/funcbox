@@ -12,6 +12,6 @@
 #include "contracts/address.fc"; 
 #include "contracts/cell.fc"; 
 #include "contracts/dump.fc"; 
-#include "contracts/math.fc"; 
-#include "contracts/dump.fc"; 
 #include "contracts/time.fc"; 
+#include "contracts/interfaces/interfaces.fc";
+#include "contracts/math/math.fc";  

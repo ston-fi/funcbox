@@ -1,0 +1,76 @@
+{-
+    math.fc
+
+    This library provide functions for math. 
+-}
+
+;; internal constants
+
+const int __math::ONE_18 = 1000000000000000000; ;; 1e18
+const int __math::ONE_20 = 100000000000000000000; ;; 1e20
+const int __math::ONE_36 = 1000000000000000000000000000000000000; ;; 1e36
+const int __math::MAX_NATURAL_EXPONENT = 130000000000000000000; ;; 130e18
+const int __math::MIN_NATURAL_EXPONENT = -41000000000000000000;   ;; -41e18
+const int __math::LN_36_LOWER_BOUND = __math::ONE_18 - 100000000000000000; ;; ONE_18 - 1e17
+const int __math::LN_36_UPPER_BOUND = __math::ONE_18 + 100000000000000000; ;; ONE_18 + 1e17
+const int __math::MILD_EXPONENT_BOUND = 28948022309329048855892746252171976963317496166410141009864396001978282409984 / __math::ONE_20; ;; 2**254 / ONE_20
+const int __math::e   = 2718281828459045235;      ;; e
+const int __math::x0  = 128000000000000000000;    ;; 2ˆ7
+const int __math::a0  = 38877084059945950922200000000000000000000000000000000000; ;; eˆ(x0) (no decimals)
+const int __math::x1  = 64000000000000000000;     ;; 2ˆ6
+const int __math::a1  = 6235149080811616882910000000; ;; eˆ(x1) (no decimals)
+const int __math::x2  = 3200000000000000000000;   ;; 2ˆ5
+const int __math::a2  = 7896296018268069516100000000000000; ;; eˆ(x2)
+const int __math::x3  = 1600000000000000000000;   ;; 2ˆ4
+const int __math::a3  = 888611052050787263676000000; ;; eˆ(x3)
+const int __math::x4  = 800000000000000000000;    ;; 2ˆ3
+const int __math::a4  = 298095798704172827474000; ;; eˆ(x4)
+const int __math::x5  = 400000000000000000000;    ;; 2ˆ2
+const int __math::a5  = 5459815003314423907810;   ;; eˆ(x5)
+const int __math::x6  = 200000000000000000000;    ;; 2ˆ1
+const int __math::a6  = 738905609893065022723;    ;; eˆ(x6)
+const int __math::x7  = 100000000000000000000;    ;; 2ˆ0
+const int __math::a7  = 271828182845904523536;    ;; eˆ(x7)
+const int __math::x8  = 50000000000000000000;     ;; 2ˆ-1
+const int __math::a8  = 164872127070012814685;    ;; eˆ(x8)
+const int __math::x9  = 25000000000000000000;     ;; 2ˆ-2
+const int __math::a9  = 128402541668774148407;    ;; eˆ(x9)
+const int __math::x10 = 12500000000000000000;     ;; 2ˆ-3
+const int __math::a10 = 113314845306682631683;    ;; eˆ(x10)
+const int __math::x11 = 6250000000000000000;      ;; 2ˆ-4
+const int __math::a11 = 106449445891785942956;    ;; eˆ(x11)
+const int __math::max_pow_relative_error = 10000; ;; 10^(-14)
+
+
+;; public constants
+
+const int math::MAX_UINT8   = 0xFF; 
+const int math::MAX_UINT16  = 0xFFFF; 
+const int math::MAX_UINT32  = 0xFFFFFFFF; 
+const int math::MAX_UINT64  = 0xFFFFFFFFFFFFFFFF; 
+const int math::MAX_UINT128 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; 
+const int math::MAX_UINT256 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; 
+const int math::max_coins   = 1329227995784915872903807060280344575; ;; 2^120 - 1
+const int math::one_dec     = __math::ONE_18;         ;; 1      with 18 decimals
+const int math::e           = __math::e;              ;; e      with 18 decimals
+const int math::pi          = 3141592653589793238;  ;; pi     with 18 decimals
+const int math::pi_sq       = 9869604401089358618;  ;; pi^2   with 18 decimals
+const int math::1_div_e     = 0367879441171442321;  ;; 1/e    with 18 decimals
+const int math::1_div_pi    = 0318309886183790671;  ;; 1/pi   with 18 decimals
+const int math::1_div_pi_sq = 0101321183642337771;  ;; 1/pi^2 with 18 decimals
+
+
+;; errors
+
+const math::error::x_out_of_bounds       = 50001;
+const math::error::y_out_of_bounds       = 50002;
+const math::error::product_out_of_bounds = 50003;
+const math::error::invalid_exponent      = 50004;
+const math::error::out_of_bounds         = 50005;
+const math::error::0_base                = 50006;
+const math::error::negative_power        = 50007;
+const math::error::zero_division         = 50008;
+
+
+#include "int.fc";
+#include "fp.fc";

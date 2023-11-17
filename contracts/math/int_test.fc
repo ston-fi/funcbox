@@ -1,0 +1,20 @@
+{-
+    int_test.fc 
+
+    Tests for math/int.fc
+-}
+
+_ test_math::int::sqrt() impure inline {
+    assert("int::sqrt #0", math::int::sqrt(10000) == 100);
+    assert("int::sqrt #1", math::int::sqrt(1000) == 31);
+}
+
+_ test_math::int::pow() impure inline {
+    assert("int::pow #0", math::int::pow(10000, 3) == 1000000000000);
+    assert("int::pow #1", math::int::pow(143, 20) == 12785589283244544365936086134520496196408001);
+}
+
+_ test::int() impure inline {
+    test_math::int::sqrt(); 
+    test_math::int::pow();
+}   

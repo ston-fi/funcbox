@@ -62,3 +62,28 @@ slice utils::number_to_slice(int number) {
     slice text = text_b.store_uint(value, len * 8).end_cell().begin_parse();
     return text;
 }
+
+() utils::send_custom(
+    int _amount, 
+    int _op, 
+    slice _to, 
+    int _mode
+) impure inline_ref {
+    cell msg = begin_cell()
+        .store_uint(0x10, 6)
+        .store_slice(_to)
+        .store_coins(_amount)
+        .store_uint(0, 107)
+        .store_uint(_op, 32)
+        .store_uint(ctx.at(QUERY_ID), 64)
+    .end_cell();
+    send_raw_message(msg, _mode);
+}
+
+() utils::send_excesses(
+    int _amount, 
+    slice _to, 
+    int _mode
+) impure inline {
+    utils::send_custom(_amount, op::excesses, _to, _mode);
+}

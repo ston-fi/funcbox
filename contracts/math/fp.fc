@@ -1,77 +1,12 @@
 {-
-    math.fc
+    fp.fc
 
-    This library provide functions for math. 
+    This library provide functions for fixed point math. 
 -}
-
-
-;; internal constants
-
-const int __math::ONE_18 = 1000000000000000000; ;; 1e18
-const int __math::ONE_20 = 100000000000000000000; ;; 1e20
-const int __math::ONE_36 = 1000000000000000000000000000000000000; ;; 1e36
-const int __math::MAX_NATURAL_EXPONENT = 130000000000000000000; ;; 130e18
-const int __math::MIN_NATURAL_EXPONENT = -41000000000000000000;   ;; -41e18
-const int __math::LN_36_LOWER_BOUND = __math::ONE_18 - 100000000000000000; ;; ONE_18 - 1e17
-const int __math::LN_36_UPPER_BOUND = __math::ONE_18 + 100000000000000000; ;; ONE_18 + 1e17
-const int __math::MILD_EXPONENT_BOUND = 28948022309329048855892746252171976963317496166410141009864396001978282409984 / __math::ONE_20; ;; 2**254 / ONE_20
-const int __math::e   = 2718281828459045235;      ;; e
-const int __math::x0  = 128000000000000000000;    ;; 2ˆ7
-const int __math::a0  = 38877084059945950922200000000000000000000000000000000000; ;; eˆ(x0) (no decimals)
-const int __math::x1  = 64000000000000000000;     ;; 2ˆ6
-const int __math::a1  = 6235149080811616882910000000; ;; eˆ(x1) (no decimals)
-const int __math::x2  = 3200000000000000000000;   ;; 2ˆ5
-const int __math::a2  = 7896296018268069516100000000000000; ;; eˆ(x2)
-const int __math::x3  = 1600000000000000000000;   ;; 2ˆ4
-const int __math::a3  = 888611052050787263676000000; ;; eˆ(x3)
-const int __math::x4  = 800000000000000000000;    ;; 2ˆ3
-const int __math::a4  = 298095798704172827474000; ;; eˆ(x4)
-const int __math::x5  = 400000000000000000000;    ;; 2ˆ2
-const int __math::a5  = 5459815003314423907810;   ;; eˆ(x5)
-const int __math::x6  = 200000000000000000000;    ;; 2ˆ1
-const int __math::a6  = 738905609893065022723;    ;; eˆ(x6)
-const int __math::x7  = 100000000000000000000;    ;; 2ˆ0
-const int __math::a7  = 271828182845904523536;    ;; eˆ(x7)
-const int __math::x8  = 50000000000000000000;     ;; 2ˆ-1
-const int __math::a8  = 164872127070012814685;    ;; eˆ(x8)
-const int __math::x9  = 25000000000000000000;     ;; 2ˆ-2
-const int __math::a9  = 128402541668774148407;    ;; eˆ(x9)
-const int __math::x10 = 12500000000000000000;     ;; 2ˆ-3
-const int __math::a10 = 113314845306682631683;    ;; eˆ(x10)
-const int __math::x11 = 6250000000000000000;      ;; 2ˆ-4
-const int __math::a11 = 106449445891785942956;    ;; eˆ(x11)
-
-;; public constants
-
-const int math::MAX_UINT8   = 0xFF; 
-const int math::MAX_UINT16  = 0xFFFF; 
-const int math::MAX_UINT32  = 0xFFFFFFFF; 
-const int math::MAX_UINT64  = 0xFFFFFFFFFFFFFFFF; 
-const int math::MAX_UINT128 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; 
-const int math::MAX_UINT256 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; 
-const int math::one_dec     = __math::ONE_18;         ;; 1      with 18 decimals
-const int math::e           = __math::e;              ;; e      with 18 decimals
-const int math::pi          = 3141592653589793238;  ;; pi     with 18 decimals
-const int math::pi_sq       = 9869604401089358618;  ;; pi^2   with 18 decimals
-const int math::1_div_e     = 0367879441171442321;  ;; 1/e    with 18 decimals
-const int math::1_div_pi    = 0318309886183790671;  ;; 1/pi   with 18 decimals
-const int math::1_div_pi_sq = 0101321183642337771;  ;; 1/pi^2 with 18 decimals
-
-
-;; errors
-
-const math::error::x_out_of_bounds       = 50001;
-const math::error::y_out_of_bounds       = 50002;
-const math::error::product_out_of_bounds = 50003;
-const math::error::invalid_exponent      = 50004;
-const math::error::out_of_bounds         = 50005;
-const math::error::0_base                = 50006;
-const math::error::negative_power        = 50007;
-
 
 ;; internal functions
 
-int __math::ln_36(int _x) impure inline_ref {
+int __fp_math::ln_36(int _x) impure inline_ref {
     _x *= __math::ONE_18;
     int z = muldiv((_x - __math::ONE_36), __math::ONE_36, (_x + __math::ONE_36));
     int z_squared = muldiv(z, z, __math::ONE_36);
@@ -103,9 +38,8 @@ int __math::ln_36(int _x) impure inline_ref {
     return series_sum * 2;
 }
 
-
-int __math::ln(int _a) impure inline_ref {
-    if _a < __math::ONE_18 { return negate(__math::ln((__math::ONE_18 * __math::ONE_18) / _a)); }
+int __fp_math::ln(int _a) impure inline_ref {
+    if _a < __math::ONE_18 { return negate(__fp_math::ln((__math::ONE_18 * __math::ONE_18) / _a)); }
 
     int sum = 0;
     if _a >= __math::a0 * __math::ONE_18 {
@@ -198,88 +132,110 @@ int __math::ln(int _a) impure inline_ref {
     return result;
 }
 
-
 ;; public functions
 
-int math::sqrt(int x) inline {
-    if (x == 0) { return x; }
-
-    int r = 181;
-    int xx = x;
-    if (xx >= 0x100000000000000000000000000000000) {
-        xx >>= 128;
-        r <<= 64;
-    }
-    if (xx >= 0x10000000000000000) {
-        xx >>= 64;
-        r <<= 32;
-    }
-    if (xx >= 0x100000000) {
-        xx >>= 32;
-        r <<= 16;
-    }
-    if (xx >= 0x10000) {
-        xx >>= 16;
-        r <<= 8;
-    }
-
-    r = (r * (xx + 65536)) >> 18;
-
-    repeat(7) {
-        r = (r + x / r) >> 1;
-    }
-
-    int r1 = x / r;
-
-    return (r < r1 ? r : r1);
+int math::fp::mul(int a, int b) inline {
+    return (a * b) / __math::ONE_18;
 }
 
+int math::fp::div(int a, int b) impure inline {
+    throw_if(math::error::zero_division, b == 0);
+    return (a * __math::ONE_18) / b;
+}
+
+int math::fp::mul_up(int a, int b) inline_ref {
+    int product = a * b;
+
+    ;; The traditional divUp formula is:
+    ;; divUp(x, y) := (x + y - 1) / y
+    ;; To avoid intermediate overflow in the addition, we distribute the division and get:
+    ;; divUp(x, y) := (x - 1) / y + 1
+    ;; Note that this requires x != 0, if x == 0 then the result is zero
+    return product == 0 ? 0 : ((product - 1) / math::one_dec) + 1; 
+}
+
+int math::fp::div_up(int a, int b) inline_ref {
+    throw_if(math::error::zero_division, b == 0);
+
+    int aInflated = a * math::one_dec;
+    ;; The traditional divUp formula is:
+    ;; divUp(x, y) := (x + y - 1) / y
+    ;; To avoid intermediate overflow in the addition, we distribute the division and get:
+    ;; _divUp(x, y) := (x - 1) / y + 1
+    ;; Note that this requires x != 0, if x == 0 then the result is zero
+
+    return a == 0 ? 0 : (a * math::one_dec - 1) / b + 1;
+}
+
+;; add 18 decimals
+int math::fp::from(int _x) inline {
+    return _x * __math::ONE_18;
+}
+
+;; remove 18 decimals (floor)
+int math::fp::to(int _x) inline {
+    return _x / __math::ONE_18;
+}
+
+;; remove 18 decimals (ceil)
+int math::fp::to_ceil(int _x) inline {
+    return _x ^/ __math::ONE_18;
+}
+
+;; remove 18 decimals (round)
+int math::fp::to_round(int _x) inline {
+    return _x ~/ __math::ONE_18;
+}
+
+;; same as regular muldiv because extra __math::ONE_18 cancel each other out in div and mul
+int math::fp::muldiv(int _x, int _y, int _z) inline {
+    ;; ((x * y / __math::ONE_18) * __math::ONE_18 / z) = x * y / z
+    return muldiv(_x, _y, _z);
+}
 
 ;; _a should have 18 decimals -> returns with 18 decimals
-int math::ln(int _a) impure inline_ref {
+int math::fp::ln(int _a) impure inline_ref {
     if _a == __math::e { return __math::ONE_18; }
     if _a == __math::ONE_18 { return 0; }
 
     throw_unless(math::error::out_of_bounds, _a > 0);
 
     if (__math::LN_36_LOWER_BOUND < _a) & (_a < __math::LN_36_UPPER_BOUND) {
-        return __math::ln_36(_a) / __math::ONE_18;
+        return __fp_math::ln_36(_a) / __math::ONE_18;
     } else {
-        return __math::ln(_a);
+        return __fp_math::ln(_a);
     }
 }
 
-
 ;; _arg and _base should have 18 decimals -> returns with 18 decimals
-int math::log(int _arg, int _base) impure inline_ref {
+int math::fp::log(int _arg, int _base) impure inline_ref {
     throw_if(math::error::0_base, _base == 0);
     if _arg == __math::ONE_18 { return 0; }
 
     int log_base = 0;
     if (__math::LN_36_LOWER_BOUND < _base) & (_base < __math::LN_36_UPPER_BOUND) {
-        log_base = __math::ln_36(_base);
+        log_base = __fp_math::ln_36(_base);
     } else {
-        log_base = __math::ln(_base) * __math::ONE_18;
+        log_base = __fp_math::ln(_base) * __math::ONE_18;
     }
 
     int log_arg = 0;
     if (__math::LN_36_LOWER_BOUND < _arg) & (_arg < __math::LN_36_UPPER_BOUND) {
-        log_arg = __math::ln_36(_arg);
+        log_arg = __fp_math::ln_36(_arg);
     } else {
-        log_arg = __math::ln(_arg) * __math::ONE_18;
+        log_arg = __fp_math::ln(_arg) * __math::ONE_18;
     }
 
     return (log_arg * __math::ONE_18) / log_base;
 }
 
-
 ;; _x should have 18 decimals -> returns with 18 decimals
-int math::exp(int _x) impure inline_ref {
+int math::fp::exp(int _x) impure inline_ref {
     if _x == __math::ONE_18 { return __math::e; }
     throw_unless(math::error::invalid_exponent, 
         (_x >= __math::MIN_NATURAL_EXPONENT) & (_x <= __math::MAX_NATURAL_EXPONENT));
 
-    if _x < 0 { return (__math::ONE_18 * __math::ONE_18) / math::exp(_x.negate()); }
+    if _x < 0 { return (__math::ONE_18 * __math::ONE_18) / math::fp::exp(_x.negate()); }
 
     int first_AN = 0;
     if _x >= __math::x0 {
@@ -369,7 +325,7 @@ int math::exp(int _x) impure inline_ref {
 }
 
 ;; _x and _y should have 18 decimals -> returns with 18 decimals
-int math::pow(int _x, int _y) impure inline_ref {
+int math::fp::pow(int _x, int _y) impure inline_ref {
     if _y == 0 { return __math::ONE_18; }
     if _x == 0 { return 0; }
     if _x == __math::ONE_18 { return __math::ONE_18; }
@@ -379,59 +335,20 @@ int math::pow(int _x, int _y) impure inline_ref {
 
     int logx_times_y = 0;
     if (__math::LN_36_LOWER_BOUND < _x) & (_x < __math::LN_36_UPPER_BOUND) {
-        int ln_36_x = __math::ln_36(_x);
+        int ln_36_x = __fp_math::ln_36(_x);
         logx_times_y = (ln_36_x / __math::ONE_18) * _y + ((ln_36_x % __math::ONE_18) * _y) / __math::ONE_18;
     } else {
-        logx_times_y = __math::ln(_x) * _y;
+        logx_times_y = __fp_math::ln(_x) * _y;
     }
     logx_times_y /= __math::ONE_18;
     throw_unless(math::error::product_out_of_bounds, 
         (__math::MIN_NATURAL_EXPONENT <= logx_times_y) & (logx_times_y <= __math::MAX_NATURAL_EXPONENT));
 
-    return math::exp(logx_times_y);
-}
-
-;; _x and _y with no decimals -> returns with 18 decimals
-int math::pow_nodec(int _x, int _y) impure inline { 
-    return math::pow(_x * __math::ONE_18, _y * __math::ONE_18);
-}
-
-;; _x with no decimals -> returns with 18 decimals
-int math::exp_nodec(int _x) impure inline { 
-    return math::exp(_x * __math::ONE_18);
-}
-
-;; _arg and _base with no decimals -> returns with 18 decimals
-int math::log_nodec(int _arg, int _base) impure inline { 
-    return math::log(_arg * __math::ONE_18, _base * __math::ONE_18);
-}
-
-;; _a with no decimals -> returns with 18 decimals
-int math::ln_nodec(int _a) impure inline { 
-    return math::ln(_a * __math::ONE_18);
-}
-
-;; _x and _y without decimals -> returns with no decimals
-int math::int_pow(int _x, int _y) impure inline_ref {
-    if _y == 0 { return 1; }
-    if _x == 0 { return 0; }
-    if _x == 1 { return 1; }
-    throw_unless(math::error::negative_power, _y > 0);
-
-    int res = 1;
-    while _y > 0 {
-        if _y & 1 {
-            res = res * _x;
-        }
-        _y = _y >> 1; 
-        _x = _x * _x; 
-    }
-
-    return res;
+    return math::fp::exp(logx_times_y);
 }
 
 ;; _x has 18 decimals -> returns with 18 decimals
-int math::int_pow_dec(int _x, int _y) impure inline_ref {
+int math::int::pow_dec(int _x, int _y) impure inline_ref {
     if _y == 0 { return __math::ONE_18; }
     if _x == 0 { return 0; }
     if _x == __math::ONE_18 { return __math::ONE_18; }
@@ -449,40 +366,44 @@ int math::int_pow_dec(int _x, int _y) impure inline_ref {
     return res;
 }
 
-;; add 18 decimals
-int math::to_dec(int _x) inline {
-    return _x * __math::ONE_18;
+;; optimized pow for weighted math
+;; Returns x^y, assuming both are fixed point numbers, rounding down. The result is guaranteed to not be above
+;; the true value (that is, the error function expected - actual is always positive).
+int math::fp::ow_pow(int x, int y) impure inline {
+    ;; Optimize for when y equals 1.0, 2.0 or 4.0, as those are very simple to implement and occur often in 50/50
+    ;; and 80/20 Weighted Pools
+    if y == 2 * math::one_dec {
+        return math::fp::mul(x, x);
+    } elseif y == 4 * math::one_dec {
+        int square = math::fp::mul(x, x);
+        return math::fp::mul(square, square);
+    } else {
+        int raw = math::fp::pow(x, y);
+        int maxError = math::fp::mul(raw, __math::max_pow_relative_error) + 1;
+
+        if raw < maxError { 
+            return 0;
+        } else {
+            return raw - maxError;
+        }
+    }
 }
 
-;; remove 18 decimals (floor)
-int math::rm_dec(int _x) inline {
-    return _x / __math::ONE_18;
+;; optimized pow_up for weighted math
+;; Returns x^y, assuming both are fixed point numbers, rounding up. The result is guaranteed to not be below
+;; the true value (that is, the error function expected - actual is always negative).
+int math::fp::ow_pow_up(int x, int y) impure inline {
+    ;; Optimize for when y equals 1.0, 2.0 or 4.0, as those are very simple to implement and occur often in 50/50
+    ;; and 80/20 Weighted Pools
+    if y == 2 * math::one_dec {
+        return math::fp::mul(x, x);
+    } elseif y == 4 * math::one_dec {
+        int square = math::fp::mul(x, x);
+        return math::fp::mul(square, square);
+    } else {
+        int raw = math::fp::pow(x, y);
+        int maxError = math::fp::mul(raw, __math::max_pow_relative_error) + 1;
+
+        return raw + maxError;
+    }
 }
-
-;; remove 18 decimals (ceil)
-int math::rm_dec_ceil(int _x) inline {
-    return _x ^/ __math::ONE_18;
-}
-
-;; remove 18 decimals (round)
-int math::rm_dec_round(int _x) inline {
-    return _x ~/ __math::ONE_18;
-}
-
-;; div 2 ints with decimals -> returns with decimals
-int math::div_dec(int _x, int _y) inline {
-    return muldiv(__math::ONE_18, _x, _y);
-}
-
-;; mul 2 ints with decimals -> returns with decimals
-int math::mul_dec(int _x, int _y) inline {
-    return muldiv(_x, _y, __math::ONE_18);
-}
-
-;; same as regular muldiv because extra __math::ONE_18 cancel each other out in div and mul
-int math::muldiv_dec(int _x, int _y, int _z) inline {
-    ;; ((x * y / __math::ONE_18) * __math::ONE_18 / z) = x * y / z
-    return muldiv(_x, _y, _z);
-}
-
-

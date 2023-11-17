@@ -1,0 +1,35 @@
+{-
+    fp_test.fc 
+
+    Tests for math/fp.fc
+-}
+
+_ test_math::fp::ln() impure inline {
+    assert("fp::ln #0", math::fp::ln(math::fp::from(10)) == 2302585092994045683);      
+}
+
+_ test_math::fp::log() impure inline {
+    assert("fp::log #0", math::fp::log(
+            math::fp::from(10),
+            math::fp::from(5)
+        ) == 1430676558073393050);      
+}
+
+_ test_math::fp::exp() impure inline {
+    assert("fp::exp #0", math::fp::exp(
+            math::fp::from(10)) == 22026465794806716516930);      
+}
+
+_ test_math::fp::pow() impure inline {
+    assert("fp::pow #0", math::fp::pow(
+            math::fp::from(323),
+            math::fp::from(22)
+        ) == 15938795234306217177076873485360043910303022847486610614966008843041200000);      
+}
+
+_ test::fp() impure inline {
+    test_math::fp::ln();
+    test_math::fp::log();
+    test_math::fp::exp();
+    test_math::fp::pow();   
+}   

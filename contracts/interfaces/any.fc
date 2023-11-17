@@ -1,0 +1,25 @@
+{-
+    interfaces/any.fc 
+
+    Payload to interact with any contract.
+-}
+
+;; prefix is b, returns builder
+(builder) any::bexcesses() inline {
+    return begin_message(op::excesses);
+}
+
+(cell) any::excesses() inline {
+    return begin_message(op::excesses)
+        .end_cell();
+}
+
+;; prefix is b, returns builder
+(builder) any::bcustom_call(int _opcode) inline {
+    return begin_message(_opcode);
+}
+
+(cell) any::custom_call(int _opcode) inline {
+    return begin_message(_opcode)
+        .end_cell();
+}

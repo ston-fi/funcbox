@@ -4,6 +4,10 @@
     Contants needed.
 -}
 
+;; Params
+
+const HOLE_ADDRESS = "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c"a;
+
 ;; Message modes. See ./msgs.fc for more
 
 ;; MODIFIER
