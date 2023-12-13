@@ -50,14 +50,14 @@ const int math::MAX_UINT32  = 0xFFFFFFFF;
 const int math::MAX_UINT64  = 0xFFFFFFFFFFFFFFFF; 
 const int math::MAX_UINT128 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; 
 const int math::MAX_UINT256 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; 
-const int math::max_coins   = 1329227995784915872903807060280344575; ;; 2^120 - 1
-const int math::one_dec     = __math::ONE_18;         ;; 1      with 18 decimals
-const int math::e           = __math::e;              ;; e      with 18 decimals
-const int math::pi          = 3141592653589793238;  ;; pi     with 18 decimals
-const int math::pi_sq       = 9869604401089358618;  ;; pi^2   with 18 decimals
-const int math::1_div_e     = 0367879441171442321;  ;; 1/e    with 18 decimals
-const int math::1_div_pi    = 0318309886183790671;  ;; 1/pi   with 18 decimals
-const int math::1_div_pi_sq = 0101321183642337771;  ;; 1/pi^2 with 18 decimals
+const int math::MAX_COINS   = 1329227995784915872903807060280344575; ;; 2^120 - 1
+const int math::ONE_DEC     = __math::ONE_18;         ;; 1      with 18 decimals
+const int math::E           = __math::e;              ;; e      with 18 decimals
+const int math::PI          = 3141592653589793238;  ;; pi     with 18 decimals
+const int math::PI_SQ       = 9869604401089358618;  ;; pi^2   with 18 decimals
+const int math::1_DIV_E     = 0367879441171442321;  ;; 1/e    with 18 decimals
+const int math::1_DIV_PI    = 0318309886183790671;  ;; 1/pi   with 18 decimals
+const int math::1_DIV_PI_SQ = 0101321183642337771;  ;; 1/pi^2 with 18 decimals
 
 
 ;; errors
@@ -70,7 +70,8 @@ const math::error::out_of_bounds         = 50005;
 const math::error::0_base                = 50006;
 const math::error::negative_power        = 50007;
 const math::error::zero_division         = 50008;
+const math::error::cmplment_out_of_range = 51002;
 
 
-#include "int.fc";
-#include "fp.fc";
+#include "int/int.fc";
+#include "fp/fp.fc";

@@ -1,5 +1,5 @@
 {-
-    fp.fc
+    math/fp/fp.fc
 
     This library provide functions for fixed point math. 
 -}
@@ -39,7 +39,7 @@ int __fp_math::ln_36(int _x) impure inline_ref {
 }
 
 int __fp_math::ln(int _a) impure inline_ref {
-    if _a < __math::ONE_18 { return negate(__fp_math::ln((__math::ONE_18 * __math::ONE_18) / _a)); }
+    if _a < __math::ONE_18 { return negate(__fp_math::ln(muldiv(__math::ONE_18, __math::ONE_18, _a))); }
 
     int sum = 0;
     if _a >= __math::a0 * __math::ONE_18 {
@@ -135,12 +135,12 @@ int __fp_math::ln(int _a) impure inline_ref {
 ;; public functions
 
 int math::fp::mul(int a, int b) inline {
-    return (a * b) / __math::ONE_18;
+    return muldiv(a, b, __math::ONE_18);
 }
 
 int math::fp::div(int a, int b) impure inline {
     throw_if(math::error::zero_division, b == 0);
-    return (a * __math::ONE_18) / b;
+    return muldiv(a, __math::ONE_18, b);
 }
 
 int math::fp::mul_up(int a, int b) inline_ref {
@@ -151,20 +151,19 @@ int math::fp::mul_up(int a, int b) inline_ref {
     ;; To avoid intermediate overflow in the addition, we distribute the division and get:
     ;; divUp(x, y) := (x - 1) / y + 1
     ;; Note that this requires x != 0, if x == 0 then the result is zero
-    return product == 0 ? 0 : ((product - 1) / math::one_dec) + 1; 
+    return product == 0 ? 0 : ((product - 1) / math::ONE_DEC) + 1; 
 }
 
 int math::fp::div_up(int a, int b) inline_ref {
     throw_if(math::error::zero_division, b == 0);
 
-    int aInflated = a * math::one_dec;
     ;; The traditional divUp formula is:
     ;; divUp(x, y) := (x + y - 1) / y
     ;; To avoid intermediate overflow in the addition, we distribute the division and get:
     ;; _divUp(x, y) := (x - 1) / y + 1
     ;; Note that this requires x != 0, if x == 0 then the result is zero
 
-    return a == 0 ? 0 : (a * math::one_dec - 1) / b + 1;
+    return a == 0 ? 0 : (a * math::ONE_DEC - 1) / b + 1;
 }
 
 ;; add 18 decimals
@@ -226,7 +225,7 @@ int math::fp::log(int _arg, int _base) impure inline_ref {
         log_arg = __fp_math::ln(_arg) * __math::ONE_18;
     }
 
-    return (log_arg * __math::ONE_18) / log_base;
+    return muldiv(log_arg, __math::ONE_18, log_base);
 }
 
 ;; _x should have 18 decimals -> returns with 18 decimals
@@ -235,7 +234,7 @@ int math::fp::exp(int _x) impure inline_ref {
     throw_unless(math::error::invalid_exponent, 
         (_x >= __math::MIN_NATURAL_EXPONENT) & (_x <= __math::MAX_NATURAL_EXPONENT));
 
-    if _x < 0 { return (__math::ONE_18 * __math::ONE_18) / math::fp::exp(_x.negate()); }
+    if _x < 0 { return muldiv(__math::ONE_18, __math::ONE_18, math::fp::exp(_x.negate())); }
 
     int first_AN = 0;
     if _x >= __math::x0 {
@@ -336,7 +335,7 @@ int math::fp::pow(int _x, int _y) impure inline_ref {
     int logx_times_y = 0;
     if (__math::LN_36_LOWER_BOUND < _x) & (_x < __math::LN_36_UPPER_BOUND) {
         int ln_36_x = __fp_math::ln_36(_x);
-        logx_times_y = (ln_36_x / __math::ONE_18) * _y + ((ln_36_x % __math::ONE_18) * _y) / __math::ONE_18;
+        logx_times_y = (ln_36_x / __math::ONE_18) * _y + muldiv(ln_36_x % __math::ONE_18, _y, __math::ONE_18);
     } else {
         logx_times_y = __fp_math::ln(_x) * _y;
     }
@@ -348,7 +347,7 @@ int math::fp::pow(int _x, int _y) impure inline_ref {
 }
 
 ;; _x has 18 decimals -> returns with 18 decimals
-int math::int::pow_dec(int _x, int _y) impure inline_ref {
+int math::fp::pow_dec(int _x, int _y) impure inline_ref {
     if _y == 0 { return __math::ONE_18; }
     if _x == 0 { return 0; }
     if _x == __math::ONE_18 { return __math::ONE_18; }
@@ -366,15 +365,20 @@ int math::int::pow_dec(int _x, int _y) impure inline_ref {
     return res;
 }
 
+int math::fp::complement(int _x) impure inline_ref {
+    throw_if(math::error::cmplment_out_of_range, (_x < 0) | (_x > math::ONE_DEC));
+    return math::ONE_DEC - _x;
+}
+
 ;; optimized pow for weighted math
 ;; Returns x^y, assuming both are fixed point numbers, rounding down. The result is guaranteed to not be above
 ;; the true value (that is, the error function expected - actual is always positive).
 int math::fp::ow_pow(int x, int y) impure inline {
     ;; Optimize for when y equals 1.0, 2.0 or 4.0, as those are very simple to implement and occur often in 50/50
     ;; and 80/20 Weighted Pools
-    if y == 2 * math::one_dec {
+    if y == 2 * math::ONE_DEC {
         return math::fp::mul(x, x);
-    } elseif y == 4 * math::one_dec {
+    } elseif y == 4 * math::ONE_DEC {
         int square = math::fp::mul(x, x);
         return math::fp::mul(square, square);
     } else {
@@ -395,9 +399,9 @@ int math::fp::ow_pow(int x, int y) impure inline {
 int math::fp::ow_pow_up(int x, int y) impure inline {
     ;; Optimize for when y equals 1.0, 2.0 or 4.0, as those are very simple to implement and occur often in 50/50
     ;; and 80/20 Weighted Pools
-    if y == 2 * math::one_dec {
+    if y == 2 * math::ONE_DEC {
         return math::fp::mul(x, x);
-    } elseif y == 4 * math::one_dec {
+    } elseif y == 4 * math::ONE_DEC {
         int square = math::fp::mul(x, x);
         return math::fp::mul(square, square);
     } else {

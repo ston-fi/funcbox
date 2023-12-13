@@ -1,7 +1,7 @@
 {-
-    fp_test.fc 
+    math/fp/fp_test.fc 
 
-    Tests for math/fp.fc
+    Tests for math/fp/fp.fc
 -}
 
 _ test_math::fp::ln() impure inline {
@@ -27,9 +27,15 @@ _ test_math::fp::pow() impure inline {
         ) == 15938795234306217177076873485360043910303022847486610614966008843041200000);      
 }
 
+_ test_math::fp::div_up() impure inline {
+    assert("fp::div_up #0", math::fp::div_up(
+            math::fp::from(10), math::fp::from(3)) == 3333333333333333334);      
+}
+
 _ test::fp() impure inline {
     test_math::fp::ln();
     test_math::fp::log();
     test_math::fp::exp();
-    test_math::fp::pow();   
-}   
+    test_math::fp::pow();
+    test_math::fp::div_up();
+}

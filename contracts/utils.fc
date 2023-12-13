@@ -87,3 +87,5 @@ slice utils::number_to_slice(int number) {
 ) impure inline {
     utils::send_custom(_amount, op::excesses, _to, _mode);
 }
+
+(int) utils::to_coins(int _n) inline { return _n * 1000000000; }

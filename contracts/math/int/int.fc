@@ -1,5 +1,5 @@
 {-
-    int.fc
+    math/int/int.fc
 
     This library provide functions for integer math. 
 -}

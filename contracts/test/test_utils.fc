@@ -6,7 +6,7 @@
 
 _ assert(slice err, int cond) impure inline {
     if ~ cond {
-        ~dump::string(err);
+        console::log(_unsafe_tuple([err]));
         throw(err.slice_hash() % 65497); ;; 2^16 - (38 + 1)
     }
 }

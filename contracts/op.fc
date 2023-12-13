@@ -37,3 +37,6 @@ const int op::sbt::take_excess = 0xd136d3b3;
 
 ;; *not* standard but can be used, as long it uses same schema
 const int op::excesses = 0xd53276db;
+
+;; special opcode, it cannot be faked from internal messages
+const int op::empty_body = -1;

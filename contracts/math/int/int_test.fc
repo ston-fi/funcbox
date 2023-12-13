@@ -1,7 +1,7 @@
 {-
-    int_test.fc 
+    math/int/int_test.fc 
 
-    Tests for math/int.fc
+    Tests for math/int/int.fc
 -}
 
 _ test_math::int::sqrt() impure inline {

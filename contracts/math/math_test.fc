@@ -1,6 +1,6 @@
 #include "math.fc";
-#include "int_test.fc";
-#include "fp_test.fc";
+#include "int/int_test.fc";
+#include "fp/fp_test.fc";
 
 _ test_math() impure inline {
     test::fp();

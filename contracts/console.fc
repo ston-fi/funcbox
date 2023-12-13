@@ -1,0 +1,91 @@
+{-
+    console.fc
+
+    This library provide functions for dumping in console. 
+-}
+
+slice console::pretty_coins(int _x) inline_ref {
+    ;; should be put in debug
+    var zeros = begin_cell();
+    int rem = _x % 1000000000;
+    while rem {
+        rem *= 10;
+        rem = rem >= 1000000000 ? 0 : rem;
+        if rem {
+            zeros = zeros.store_slice("0");
+        }
+    }
+    return begin_cell()
+            .store_slice(utils::number_to_slice(_x / 1000000000))
+            .store_slice(".")
+            .store_slice(zeros.as_slice())
+            .store_slice(utils::number_to_slice(_x % 1000000000))
+        .as_slice();
+}
+
+
+slice console::pretty_fp(int _x) inline_ref {
+    ;; should be put in debug
+    var zeros = begin_cell();
+    int rem = _x % math::ONE_DEC;
+    while rem {
+        rem *= 10;
+        rem = rem >= math::ONE_DEC ? 0 : rem;
+        if rem {
+            zeros = zeros.store_slice("0");
+        }
+    }
+    return begin_cell()
+            .store_slice(utils::number_to_slice(_x / math::ONE_DEC))
+            .store_slice(".")
+            .store_slice(zeros.as_slice())
+            .store_slice(utils::number_to_slice(_x % math::ONE_DEC))
+        .as_slice();
+}
+
+;; can write at most 127 chars
+;; unsupported fields are ignored
+_ console::log(tuple _val) impure {
+    builder _txt = begin_cell();
+    int i = 0;
+    repeat(_val.tlen()) {
+        if (_val.at(i)).is_null() {
+            _txt = _txt.store_slice("NULL");
+        } elseif (_val.at(i)).is_int() {
+            int val = cast_to_int(_val.at(i));
+            _txt = _txt.store_slice(val.utils::number_to_slice());
+        } elseif (_val.at(i)).is_slice() {
+            slice val = cast_to_slice(_val.at(i));
+            ;; check if ascii?
+            _txt = _txt.store_slice(val);
+        } elseif (_val.at(i)).is_tuple() {
+            ;; check nested types (fp, coins)
+            (slice _t, int val) = unpair(_val.at(i));
+            if equal_slices(_t, "coins") {
+                _txt = _txt.store_slice(console::pretty_coins(val));
+            } elseif equal_slices(_t, "fp") {
+                _txt = _txt.store_slice(console::pretty_fp(val));
+            } else {
+                _txt = _txt.store_slice("-");
+            }            
+        } elseif (_val.at(i)).is_nan() {
+            _txt = _txt.store_slice("NAN");
+        }
+
+        i += 1;
+    }
+
+    ~strdump_safe_not_pretty(_txt.as_slice());
+}
+
+_ console::log_int(int value) impure {
+    slice text_extended = begin_cell()
+            .store_slice(utils::number_to_slice(value))
+            .as_slice();
+    ~strdump_safe_not_pretty(text_extended);
+}
+
+_ console::log_raw(slice sc) impure {
+    ~strdump_safe_not_pretty(sc);
+}
+

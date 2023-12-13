@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.0.12] - 2023-12-13
+
+### Added
+
+- Add `math::fp::complement` math function 
+- Add `console::pretty_coins`, `console::pretty_coins`, `console::log` functions
+- Add `change_lib` and `set_lib` to `stdlib_ext`
+- Add `address::check_workchain_nofail` and `address::is_hole` to address lib
+- Add `ctx::init_wempty` to ctx lib
+
+### Changed  
+
+- Change math libs structure
+- Change `math::int::pow_dec` to `math::fp::pow_dec`
+- Change capitalize public constants
+
+### Fixed
+
+- Fix use `muldiv` where needed
+
 ## [0.0.11] - 2023-11-17
 
 ### Added
@@ -108,6 +128,7 @@
 
 - Add initial library release
 
+[0.0.12]: https://github.com/ston-fi/funcbox/tree/v0.0.12
 [0.0.11]: https://github.com/ston-fi/funcbox/tree/v0.0.11
 [0.0.10]: https://github.com/ston-fi/funcbox/tree/v0.0.10
 [0.0.9]: https://github.com/ston-fi/funcbox/tree/v0.0.9
