@@ -45,22 +45,23 @@ slice console::pretty_fp(int _x) inline_ref {
 
 ;; can write at most 127 chars
 ;; unsupported fields are ignored
-_ console::log(tuple _val) impure {
+forall X -> () console::log(X _val) impure {
+    tuple val = _unsafe_tuple(_val);
     builder _txt = begin_cell();
     int i = 0;
-    repeat(_val.tlen()) {
-        if (_val.at(i)).is_null() {
+    repeat(val.tlen()) {
+        if (val.at(i)).is_null() {
             _txt = _txt.store_slice("NULL");
-        } elseif (_val.at(i)).is_int() {
-            int val = cast_to_int(_val.at(i));
+        } elseif (val.at(i)).is_int() {
+            int val = cast_to_int(val.at(i));
             _txt = _txt.store_slice(val.utils::number_to_slice());
-        } elseif (_val.at(i)).is_slice() {
-            slice val = cast_to_slice(_val.at(i));
+        } elseif (val.at(i)).is_slice() {
+            slice val = cast_to_slice(val.at(i));
             ;; check if ascii?
             _txt = _txt.store_slice(val);
-        } elseif (_val.at(i)).is_tuple() {
+        } elseif (val.at(i)).is_tuple() {
             ;; check nested types (fp, coins)
-            (slice _t, int val) = unpair(_val.at(i));
+            (slice _t, int val) = unpair(val.at(i));
             if equal_slices(_t, "coins") {
                 _txt = _txt.store_slice(console::pretty_coins(val));
             } elseif equal_slices(_t, "fp") {
@@ -68,7 +69,7 @@ _ console::log(tuple _val) impure {
             } else {
                 _txt = _txt.store_slice("-");
             }            
-        } elseif (_val.at(i)).is_nan() {
+        } elseif (val.at(i)).is_nan() {
             _txt = _txt.store_slice("NAN");
         }
 

@@ -11,6 +11,24 @@ _ test_stdlib_ext::begin_message() impure inline {
         begin_cell().store_uint(10, 32).store_uint(ctx.at(QUERY_ID), 64).end_cell().cell_hash());
 }
 
+_ test_stdlib_ext::my_code() impure inline {
+    assert("my_code #0", begin_cell().end_cell().cell_hash() !=
+        cell_hash(my_code()));
+}
+
+_ test_stdlib_ext::get_values() impure inline {
+    var values = get_values();
+    assert("get_values #0", values.at(0) == 1000000000);
+}
+
+_ test_stdlib_ext::get_storage_fee() impure inline {
+    assert("get_storage_fee #0", get_storage_fee() == 0);
+}
+
+_ test_stdlib_ext::get_gas_consumed() impure inline {
+    assert("get_gas_consumed #0", get_gas_consumed() > 0);
+}
+
 _ test_stdlib_ext::store_status() impure inline {
     assert("store_status #0", begin_cell().store_status(0).end_cell().cell_hash() ==
         begin_cell().store_uint(0, 8).end_cell().cell_hash());
@@ -21,4 +39,8 @@ _ test_stdlib_ext::store_status() impure inline {
 _ test_stdlib_ext() impure inline_ref {
     test_stdlib_ext::begin_message();
     test_stdlib_ext::store_status(); 
+    test_stdlib_ext::my_code(); 
+    test_stdlib_ext::get_values();
+    test_stdlib_ext::get_storage_fee();
+    test_stdlib_ext::get_gas_consumed();
 }

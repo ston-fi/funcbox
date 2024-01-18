@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.13] - 2024-01-18
+
+### Added
+
+- Add new hash functions
+- Add new message modes & modifiers
+- Add new c7 opcode wrappers
+
+### Changed  
+
+- `Console::log` doesnt require explicit to tuple conversion
+
 ## [0.0.12] - 2023-12-13
 
 ### Added
@@ -128,6 +140,7 @@
 
 - Add initial library release
 
+[0.0.13]: https://github.com/ston-fi/funcbox/tree/v0.0.13
 [0.0.12]: https://github.com/ston-fi/funcbox/tree/v0.0.12
 [0.0.11]: https://github.com/ston-fi/funcbox/tree/v0.0.11
 [0.0.10]: https://github.com/ston-fi/funcbox/tree/v0.0.10

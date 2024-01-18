@@ -4,8 +4,8 @@
     Additional functions that are not present in stdlib.fc
 -}
 
-(int) mod (int x, int y) asm "MOD";
-(int) divc (int x, int y) asm "DIVC";
+(int) mod(int x, int y) asm "MOD";
+(int) divc(int x, int y) asm "DIVC";
 slice preload_bits_offset(slice s, int offset, int len) asm "SDSUBSTR";
 int builder_null?(builder b) asm "ISNULL";
 (slice, slice) load_slice_ref(slice s) asm "LDREFRTOS";
@@ -64,3 +64,28 @@ forall X -> cell  cast_to_cell(X x) asm "NOP";
 forall X -> slice cast_to_slice(X x) asm "NOP";
 forall X -> int   cast_to_int(X x) asm "NOP";
 forall X -> tuple cast_to_tuple(X x) asm "NOP";
+(cell) my_code() asm "MYCODE";
+(tuple) get_values() asm "INCOMINGVALUE";
+(int) get_storage_fee() asm "STORAGEFEES";
+(tuple) get_prev_block_info() asm "PREVBLOCKSINFOTUPLE";
+(tuple) get_last_mc_block() asm "PREVMCBLOCKS";
+(tuple) get_prev_key_block() asm "PREVKEYBLOCK";
+(int) get_global_id() asm "GLOBALID";
+(int) get_gas_consumed() asm "GASCONSUMED";
+(int) sha256_single(slice _t0) asm "1 PUSHINT HASHEXT_SHA256";
+(int) sha256_double(slice _t0, slice _t1) asm "2 PUSHINT HASHEXT_SHA256";
+(int) sha256_triple(slice _t0, slice _t1, slice _t2) asm "3 PUSHINT HASHEXT_SHA256";
+(int) sha512_single(slice _t0) asm "1 PUSHINT HASHEXT_SHA512";
+(int) sha512_double(slice _t0, slice _t1) asm "2 PUSHINT HASHEXT_SHA512";
+(int) sha512_triple(slice _t0, slice _t1, slice _t2) asm "3 PUSHINT HASHEXT_SHA512";
+(int) blake2b_single(slice _t0) asm "1 PUSHINT HASHEXT_BLAKE2B";
+(int) blake2b_double(slice _t0, slice _t1) asm "2 PUSHINT HASHEXT_BLAKE2B";
+(int) blake2b_triple(slice _t0, slice _t1, slice _t2) asm "3 PUSHINT HASHEXT_BLAKE2B";
+(int) keccack256_single(slice _t0) asm "1 PUSHINT HASHEXT_KECCAK256";
+(int) keccack256_double(slice _t0, slice _t1) asm "2 PUSHINT HASHEXT_KECCAK256";
+(int) keccack256_triple(slice _t0, slice _t1, slice _t2) asm "3 PUSHINT HASHEXT_KECCAK256";
+(int) keccack512_single(slice _t0) asm "1 PUSHINT HASHEXT_KECCAK512";
+(int) keccack512_double(slice _t0, slice _t1) asm "2 PUSHINT HASHEXT_KECCAK512";
+(int) keccack512_triple(slice _t0, slice _t1, slice _t2) asm "3 PUSHINT HASHEXT_KECCAK512";
+(int, int, int, int) ecrecover(int hash, int v, int r, int s) asm "ECRECOVER NULLSWAPIFNOT NULLSWAPIFNOT2";
+() send_message(cell c, int m) asm "SENDMSG";
