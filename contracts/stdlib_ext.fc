@@ -52,6 +52,11 @@ forall X -> X ~dump_safe(X value) impure asm "s0 DUMP";
 (int) sub1(int _n) asm "DEC";
 (int) add1(int _n) asm "INC";
 (int) sgn(int _n) asm "SGN";
+(int, ()) ~sub1(int _n) asm "DEC";
+(int, ()) ~add1(int _n) asm "INC";
+(int, ()) ~negate(int _n) asm "NEGATE";
+(int, ()) ~sgn(int _n) asm "SGN";
+
 () set_lib(cell code, int mode) impure asm "SETLIBCODE";
 () change_lib(int code_hash, int mode) impure asm "CHANGELIB";
 forall X -> int   is_null(X x) asm "ISNULL";

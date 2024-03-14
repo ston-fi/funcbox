@@ -4,14 +4,6 @@
     This library simply the creation and manipulation of dictionaries.
 -}
 
-_ dict::from_cell(cell _cell, int _key_len) inline {
-    return [_key_len, _cell];
-}
-
-_ dict::empty(int _key_len) inline {
-    return dict::from_cell(null(), _key_len);
-}
-
 _ dict::set([int, cell] cntr, slice _data, int _index) inline {
     [int _key_len, cell _cell?] = cntr; 
     _cell?~udict_set(_key_len, _index, _data);
@@ -39,25 +31,25 @@ _ dict::set_ref([int, cell] cntr, cell _data, int _index) inline {
 _ dict::get([int, cell] cntr, int _index) inline {
     [int _key_len, cell _cell?] = cntr; 
     (slice _data, int _found) = _cell?.udict_get?(_key_len, _index);
-    return ([_key_len, _cell?], _data, _found);
+    return (_data, _found);
 }
 
 _ dict::iget([int, cell] cntr, int _index) inline {
     [int _key_len, cell _cell?] = cntr; 
     (slice _data, int _found) = _cell?.idict_get?(_key_len, _index);
-    return ([_key_len, _cell?], _data, _found);
+    return (_data, _found);
 }
 
 _ dict::get_ref([int, cell] cntr, int _index) inline {
     [int _key_len, cell _cell?] = cntr; 
     (cell _data, int _found) = _cell?.udict_get_ref?(_key_len, _index);
-    return ([_key_len, _cell?], _data, _found);
+    return (_data, _found);
 }
 
 _ dict::iget_ref([int, cell] cntr, int _index) inline {
     [int _key_len, cell _cell?] = cntr; 
     (cell _data, int _found) = _cell?.idict_get_ref?(_key_len, _index);
-    return ([_key_len, _cell?], _data, _found);
+    return (_data, _found);
 }
 
 _ dict::delete([int, cell] cntr, int _index) inline {
@@ -70,4 +62,66 @@ _ dict::idelete([int, cell] cntr, int _index) inline {
     [int _key_len, cell _cell?] = cntr; 
     int _deleted = _cell?~idict_delete?(_key_len, _index);
     return ([_key_len, _cell?], _deleted);
+}
+
+_ dict::get_key_len([int, cell] cntr) inline {
+    [int _key_len, _] = cntr; 
+    return _key_len;
+}
+
+_ dict::get_cell([int, cell] cntr) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    return _cell?;
+}
+
+_ dict::from_cell(cell _cell, int _key_len) inline {
+    return [_key_len, _cell];
+}
+
+_ ~dict::idelete([int, cell] cntr, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    int _deleted = _cell?~idict_delete?(_key_len, _index);
+    return ([_key_len, _cell?], _deleted);
+}
+
+_ ~dict::delete([int, cell] cntr, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    int _deleted = _cell?~udict_delete?(_key_len, _index);
+    return ([_key_len, _cell?], _deleted);
+}
+
+_ ~dict::set_ref([int, cell] cntr, cell _data, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    _cell?~udict_set_ref(_key_len, _index, _data);
+    return ([_key_len, _cell?], ());
+}
+
+_ ~dict::iset_ref([int, cell] cntr, cell _data, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    _cell?~idict_set_ref(_key_len, _index, _data);
+    return ([_key_len, _cell?], ());
+}
+
+_ ~dict::iset([int, cell] cntr, slice _data, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    _cell?~idict_set(_key_len, _index, _data);
+    return ([_key_len, _cell?], ());
+}
+
+_ ~dict::set([int, cell] cntr, slice _data, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    _cell?~udict_set(_key_len, _index, _data);
+    return ([_key_len, _cell?], ());
+}
+
+_ dict::replace([int, cell] cntr, slice _data, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    int replaced? = _cell?~udict_replace?(_key_len, _index, _data);
+    return ([_key_len, _cell?], replaced?);
+}
+
+_ ~dict::replace([int, cell] cntr, slice _data, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    int replaced? = _cell?~udict_replace?(_key_len, _index, _data);
+    return ([_key_len, _cell?], replaced?);
 }
