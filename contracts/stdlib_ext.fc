@@ -71,7 +71,6 @@ forall X -> int   cast_to_int(X x) asm "NOP";
 forall X -> tuple cast_to_tuple(X x) asm "NOP";
 (cell) my_code() asm "MYCODE";
 (tuple) get_values() asm "INCOMINGVALUE";
-(int) get_storage_fee() asm "STORAGEFEES";
 (tuple) get_prev_block_info() asm "PREVBLOCKSINFOTUPLE";
 (tuple) get_last_mc_block() asm "PREVMCBLOCKS";
 (tuple) get_prev_key_block() asm "PREVKEYBLOCK";
@@ -93,4 +92,16 @@ forall X -> tuple cast_to_tuple(X x) asm "NOP";
 (int) keccack512_double(slice _t0, slice _t1) asm "2 PUSHINT HASHEXT_KECCAK512";
 (int) keccack512_triple(slice _t0, slice _t1, slice _t2) asm "3 PUSHINT HASHEXT_KECCAK512";
 (int, int, int, int) ecrecover(int hash, int v, int r, int s) asm "ECRECOVER NULLSWAPIFNOT NULLSWAPIFNOT2";
-() send_message(cell c, int m) asm "SENDMSG";
+int send_message(cell msg, int mode) impure asm "SENDMSG";
+
+int get_compute_fee(int workchain, int gas_used) asm(gas_used workchain) "GETGASFEE";
+int get_storage_fee(int workchain, int seconds, int bits, int cells) asm(cells bits seconds workchain) "GETSTORAGEFEE";
+int get_forward_fee(int workchain, int bits, int cells) asm(cells bits workchain) "GETFORWARDFEE";
+int get_precompiled_gas_consumption() asm "GETPRECOMPILEDGAS";
+int get_simple_compute_fee(int workchain, int gas_used) asm(gas_used workchain) "GETGASFEESIMPLE";
+int get_simple_forward_fee(int workchain, int bits, int cells) asm(cells bits workchain) "GETFORWARDFEESIMPLE";
+int get_original_fwd_fee(int workchain, int fwd_fee) asm(fwd_fee workchain) "GETORIGINALFWDFEE";
+int my_storage_due() asm "DUEPAYMENT";
+tuple get_fee_cofigs() asm "UNPACKEDCONFIGTUPLE";
+
+(slice, ()) ~skip_maybe_ref(slice s) asm "SKIPOPTREF";

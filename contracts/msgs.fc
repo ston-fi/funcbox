@@ -6,7 +6,7 @@
 
 () msgs::send_empty(int amount, slice to, int mode) impure inline_ref {
     cell msg = begin_cell()
-        .store_uint(0x18, 6)
+        .store_uint(SEND_MSG_BOUNCEABLE, 6)
         .store_slice(to)
         .store_coins(amount)
         .store_uint(0, 107)
@@ -16,7 +16,7 @@
 
 () msgs::send_simple(int amount, slice to, cell body, int mode) impure inline_ref {
     cell msg = begin_cell()
-        .store_uint(0x18, 6)
+        .store_uint(SEND_MSG_BOUNCEABLE, 6)
         .store_slice(to)
         .store_coins(amount)
         .store_uint(1, 107)
@@ -27,7 +27,7 @@
 
 () msgs::send_bsimple(int amount, slice to, builder body, int mode) impure inline_ref {
     cell msg = begin_cell()
-        .store_uint(0x18, 6)
+        .store_uint(SEND_MSG_BOUNCEABLE, 6)
         .store_slice(to)
         .store_coins(amount)
         .store_uint(0, 107)
@@ -38,7 +38,7 @@
 
 () msgs::send_nobounce(int amount, slice to, cell body, int mode) impure inline_ref {
     cell msg = begin_cell()
-        .store_uint(0x10, 6)
+        .store_uint(SEND_MSG_NON_BOUNCEABLE, 6)
         .store_slice(to)
         .store_coins(amount)
         .store_uint(1, 107)
@@ -49,7 +49,7 @@
 
 () msgs::send_bnobounce(int amount, slice to, builder body, int mode) impure inline_ref {
     cell msg = begin_cell()
-        .store_uint(0x10, 6)
+        .store_uint(SEND_MSG_NON_BOUNCEABLE, 6)
         .store_slice(to)
         .store_coins(amount)
         .store_uint(0, 107)
@@ -60,7 +60,7 @@
 
 () msgs::send_with_stateinit(int amount, slice to, cell state_init, cell body, int mode) impure inline_ref {
     cell msg = begin_cell()
-        .store_uint(0x18, 6)
+        .store_uint(SEND_MSG_BOUNCEABLE, 6)
         .store_slice(to)
         .store_coins(amount)
         .store_uint(7, 108)
@@ -72,7 +72,7 @@
 
 () msgs::send_bwith_stateinit(int amount, slice to, cell state_init, builder body, int mode) impure inline_ref {
     cell msg = begin_cell()
-        .store_uint(0x18, 6)
+        .store_uint(SEND_MSG_BOUNCEABLE, 6)
         .store_slice(to)
         .store_coins(amount)
         .store_uint(6, 108)

@@ -8,7 +8,17 @@
 
 const HOLE_ADDRESS = "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c"a;
 
+const int TRUE = -1;
+const int FALSE = 0;
+const int MASTERCHAIN = -1;
+const int BASECHAIN = 0;
+
 ;; Message modes. See ./msgs.fc for more
+
+;; 0b011000 tag - 0, ihr_disabled - 1, bounce - 1, bounced - 0, src = adr_none$00
+const int SEND_MSG_BOUNCEABLE = 0x18; 
+;; 0b010000 tag - 0, ihr_disabled - 1, bounce - 0, bounced - 0, src = adr_none$00
+const int SEND_MSG_NON_BOUNCEABLE = 0x10;
 
 ;; MODIFIER
 const NORMAL = 0;
@@ -49,3 +59,4 @@ const RESERVE_AT_MOST    = 2;
 const EXTRN_DO_NOT_FAIL  = 2;
 const BALANCE_INCREASED  = 4;
 const BALANCE_DECREASED  = 8;
+const int RESERVE_BOUNCE_ON_ACTION_FAIL = 16;

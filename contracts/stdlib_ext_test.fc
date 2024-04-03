@@ -22,8 +22,17 @@ _ test_stdlib_ext::get_values() impure inline {
 }
 
 _ test_stdlib_ext::get_storage_fee() impure inline {
-    assert("get_storage_fee #0", get_storage_fee() == 0);
+    assert("get_storage_fee #0", get_storage_fee(0, 1000, 1023, 1) > 0);
 }
+
+_ test_stdlib_ext::get_compute_fee() impure inline {
+    assert("get_compute_fee #0", get_compute_fee(0, 1000) > 0);
+}
+
+_ test_stdlib_ext::get_forward_fee() impure inline {
+    assert("get_forward_fee #0", get_forward_fee(0, 1023, 1) > 0);
+}
+
 
 _ test_stdlib_ext::get_gas_consumed() impure inline {
     assert("get_gas_consumed #0", get_gas_consumed() > 0);
@@ -43,4 +52,6 @@ _ test_stdlib_ext() impure inline_ref {
     test_stdlib_ext::get_values();
     test_stdlib_ext::get_storage_fee();
     test_stdlib_ext::get_gas_consumed();
+    test_stdlib_ext::get_forward_fee();
+    test_stdlib_ext::get_compute_fee();
 }
