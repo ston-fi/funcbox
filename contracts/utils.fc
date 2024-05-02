@@ -5,7 +5,7 @@
 -}
 
 slice utils::address_to_hex_string(int value) inline {
-    if (value == 0) {
+    if value == 0 {
         builder buffer = begin_cell();
         int i = 0;
         while (i < 64){
@@ -44,9 +44,9 @@ slice utils::address_to_hex_string(int value) inline {
     }
 }
 
-slice utils::number_to_slice(int number) {
+slice utils::number_to_slice(int number) inline {
     builder text_b = begin_cell();
-    if (number < 0) {
+    if number < 0 {
         text_b = text_b.store_slice("-");
         number = - number;
     }
@@ -68,7 +68,7 @@ slice utils::number_to_slice(int number) {
     int _op, 
     slice _to, 
     int _mode
-) impure inline_ref {
+) impure inline {
     cell msg = begin_cell()
         .store_uint(0x10, 6)
         .store_slice(_to)

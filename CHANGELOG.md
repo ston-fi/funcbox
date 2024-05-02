@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.1.0] - 2024-05-02
+
+### Added
+
+- Add new opcodes
+
+### Changed
+
+- Code cleanup
+- Functions that were marked as `inline_ref`, now are marked as `inline`
+
 ## [0.0.15] - 2024-04-03
 
 ### Added
@@ -152,7 +163,8 @@
 ### Added
 
 - Add initial library release
-
+- 
+[0.1.0]: https://github.com/ston-fi/funcbox/tree/v0.1.0
 [0.0.15]: https://github.com/ston-fi/funcbox/tree/v0.0.15
 [0.0.14]: https://github.com/ston-fi/funcbox/tree/v0.0.14
 [0.0.13]: https://github.com/ston-fi/funcbox/tree/v0.0.13

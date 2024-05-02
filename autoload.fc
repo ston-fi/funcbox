@@ -1,11 +1,11 @@
 #pragma version >=0.4.4;
 
 #include "contracts/stdlib.fc";
+#include "contracts/stdlib_ext.fc";
 #include "contracts/consts.fc"; 
 #include "contracts/globs.fc"; 
 #include "contracts/op.fc"; 
 #include "contracts/reserves.fc"; 
-#include "contracts/stdlib_ext.fc";
 #include "contracts/msgs.fc";
 #include "contracts/dict.fc";
 #include "contracts/utils.fc";

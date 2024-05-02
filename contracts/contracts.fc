@@ -16,7 +16,7 @@
     return [code, data, null(), null()];
 }
 
-([cell, cell, cell, slice], cell) state_init([cell, cell, cell, slice] cntr) inline_ref {
+([cell, cell, cell, slice], cell) state_init([cell, cell, cell, slice] cntr) inline {
     [cell _code?, cell _data?, cell _state_init?, slice _addr?] = cntr; 
 
     if _state_init?.null?() {
@@ -31,7 +31,7 @@
     return ([_code?, _data?, _state_init?, _addr?], _state_init?);
 }
 
-([cell, cell, cell, slice], slice) address([cell, cell, cell, slice] cntr, int workchain) inline_ref {
+([cell, cell, cell, slice], slice) address([cell, cell, cell, slice] cntr, int workchain) inline {
     [cell _code?, cell _data?, cell _state_init?, slice _addr?] = cntr; 
 
     if _addr?.null?() {

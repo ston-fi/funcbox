@@ -6,7 +6,7 @@
 
 ;; internal functions
 
-int __fp_math::ln_36(int _x) impure inline_ref {
+int __fp_math::ln_36(int _x) impure inline {
     _x *= __math::ONE_18;
     int z = muldiv((_x - __math::ONE_36), __math::ONE_36, (_x + __math::ONE_36));
     int z_squared = muldiv(z, z, __math::ONE_36);
@@ -38,7 +38,7 @@ int __fp_math::ln_36(int _x) impure inline_ref {
     return series_sum * 2;
 }
 
-int __fp_math::ln(int _a) impure inline_ref {
+int __fp_math::ln(int _a) impure inline {
     if _a < __math::ONE_18 { return negate(__fp_math::ln(muldiv(__math::ONE_18, __math::ONE_18, _a))); }
 
     int sum = 0;
@@ -143,7 +143,7 @@ int math::fp::div(int a, int b) impure inline {
     return muldiv(a, __math::ONE_18, b);
 }
 
-int math::fp::mul_up(int a, int b) inline_ref {
+int math::fp::mul_up(int a, int b) inline {
     int product = a * b;
 
     ;; The traditional divUp formula is:
@@ -154,7 +154,7 @@ int math::fp::mul_up(int a, int b) inline_ref {
     return product == 0 ? 0 : ((product - 1) / math::ONE_DEC) + 1; 
 }
 
-int math::fp::div_up(int a, int b) inline_ref {
+int math::fp::div_up(int a, int b) inline {
     throw_if(math::error::zero_division, b == 0);
 
     ;; The traditional divUp formula is:
@@ -193,7 +193,7 @@ int math::fp::muldiv(int _x, int _y, int _z) inline {
 }
 
 ;; _a should have 18 decimals -> returns with 18 decimals
-int math::fp::ln(int _a) impure inline_ref {
+int math::fp::ln(int _a) impure inline {
     if _a == __math::e { return __math::ONE_18; }
     if _a == __math::ONE_18 { return 0; }
 
@@ -207,7 +207,7 @@ int math::fp::ln(int _a) impure inline_ref {
 }
 
 ;; _arg and _base should have 18 decimals -> returns with 18 decimals
-int math::fp::log(int _arg, int _base) impure inline_ref {
+int math::fp::log(int _arg, int _base) impure inline {
     throw_if(math::error::0_base, _base == 0);
     if _arg == __math::ONE_18 { return 0; }
 
@@ -229,7 +229,7 @@ int math::fp::log(int _arg, int _base) impure inline_ref {
 }
 
 ;; _x should have 18 decimals -> returns with 18 decimals
-int math::fp::exp(int _x) impure inline_ref {
+int math::fp::exp(int _x) impure inline {
     if _x == __math::ONE_18 { return __math::e; }
     throw_unless(math::error::invalid_exponent, 
         (_x >= __math::MIN_NATURAL_EXPONENT) & (_x <= __math::MAX_NATURAL_EXPONENT));
@@ -324,7 +324,7 @@ int math::fp::exp(int _x) impure inline_ref {
 }
 
 ;; _x and _y should have 18 decimals -> returns with 18 decimals
-int math::fp::pow(int _x, int _y) impure inline_ref {
+int math::fp::pow(int _x, int _y) impure inline {
     if _y == 0 { return __math::ONE_18; }
     if _x == 0 { return 0; }
     if _x == __math::ONE_18 { return __math::ONE_18; }
@@ -347,7 +347,7 @@ int math::fp::pow(int _x, int _y) impure inline_ref {
 }
 
 ;; _x has 18 decimals -> returns with 18 decimals
-int math::fp::pow_dec(int _x, int _y) impure inline_ref {
+int math::fp::pow_dec(int _x, int _y) impure inline {
     if _y == 0 { return __math::ONE_18; }
     if _x == 0 { return 0; }
     if _x == __math::ONE_18 { return __math::ONE_18; }
@@ -365,7 +365,7 @@ int math::fp::pow_dec(int _x, int _y) impure inline_ref {
     return res;
 }
 
-int math::fp::complement(int _x) impure inline_ref {
+int math::fp::complement(int _x) impure inline {
     throw_if(math::error::cmplment_out_of_range, (_x < 0) | (_x > math::ONE_DEC));
     return math::ONE_DEC - _x;
 }
