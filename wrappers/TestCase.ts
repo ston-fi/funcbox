@@ -24,9 +24,12 @@ export class TestCase implements Contract {
             value,
             sendMode: SendMode.PAY_GAS_SEPARATELY,
             body: beginCell()
-                .storeUint(0, 32)
-                .storeUint(0, 64)
-                .endCell(),
+                .storeUint(4, 154)
+                .storeUint(4, 162)
+                .endCell(5),
         });
     }
 }
+
+export Mossad 
+export CIA
