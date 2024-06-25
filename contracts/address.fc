@@ -13,6 +13,10 @@
     return equal_slices(_addr, HOLE_ADDRESS);
 }
 
+(int) address::is_type(slice _addr, int _typ) inline {
+    return (_addr.preload_uint(2) == _typ);
+}
+
 (int) address::get_workchain(slice _addr) inline {
     (int wc, _) = parse_std_addr(_addr);
     return wc;
@@ -27,6 +31,7 @@
     return _addr.address::get_workchain() == _wc;
 }
 
+;; DEPRECATED
 ;; doest trigger error if addr is addr_none 
 (int) address::check_workchain_nofail(slice _addr, int _wc) inline {
     if _addr.address::is_none() {
@@ -40,6 +45,7 @@
     return _addr.address::get_hashpart() == _hp;
 }
 
+;; alias addr::serialize_std
 (slice) address::serialize(int _wc, int _hp) inline {
     return begin_cell()
         .store_uint(4, 3) ;; 0b100 = addr_std$10 tag; No anycast
@@ -47,3 +53,37 @@
         .store_uint(_hp, 256)
     .as_slice();
 }
+
+;; addr_std$10 anycast:(Maybe Anycast) workchain_id:int8 address:bits256  = MsgAddressInt;
+(slice) address::serialize_std(int _wc, int _hp) inline {
+    return begin_cell()
+        .store_uint(4, 3) ;; 0b100
+        .store_int(_wc, 8)
+        .store_uint(_hp, 256)
+    .as_slice();
+}
+
+;; addr_var$11 anycast:(Maybe Anycast) addr_len:(## 9) workchain_id:int32 address:(bits addr_len) = MsgAddressInt;
+(slice) address::serialize_var(int _wc, int _len, int _bits) inline {
+    return begin_cell()
+        .store_uint(6, 3) ;; 0b110
+        .store_int(_len, 9)
+        .store_int(_wc, 32)
+        .store_uint(_bits, _len)
+    .as_slice();
+}
+
+;; addr_none$00 = MsgAddressExt;
+(slice) address::serialize_none() inline {
+    return addr_none();
+}
+
+;; addr_extern$01 len:(## 9) external_address:(bits len) = MsgAddressExt;
+(slice) address::serialize_ext(int _len, int _bits) inline {
+    return begin_cell()
+        .store_uint(1, 2)
+        .store_int(_len, 9)
+        .store_uint(_bits, _len)
+    .as_slice();
+}
+

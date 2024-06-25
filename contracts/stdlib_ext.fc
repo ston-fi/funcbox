@@ -10,8 +10,8 @@ slice preload_bits_offset(slice s, int offset, int len) asm "SDSUBSTR";
 int builder_null?(builder b) asm "ISNULL";
 (slice, slice) load_slice_ref(slice s) asm "LDREFRTOS";
 forall X -> int to_int(X x) asm "NOP";
-(slice, int) load_bool(slice b) inline asm "1 LDU SWAP 1 EQINT";
-(builder) store_bool(builder b, int v) inline asm " 0 NEQINT ABS SWAP 1 STU";
+(slice, int) load_bool(slice s) asm(-> 1 0) "1 LDI";
+(builder) store_bool(builder b, int v) asm(v b) "1 STI";
 slice addr_none() asm "<b b{00} s, b> <s PUSHSLICE";
 cell empty_cell() asm "<b b> PUSHREF";
 slice empty_slice() asm "<b b> <s PUSHSLICE";
@@ -109,3 +109,24 @@ int my_storage_due() asm "DUEPAYMENT";
 tuple get_fee_cofigs() asm "UNPACKEDCONFIGTUPLE";
 
 (slice, ()) ~skip_maybe_ref(slice s) asm "SKIPOPTREF";
+
+int cell_level(cell c) asm "CLEVEL";
+int cell_level_mask(cell c) asm "CLEVELMASK";
+
+builder store_addr_none(builder b) asm "b{00} STSLICECONST";
+int is_bool(int x) asm "CHKBOOL";
+
+builder store_zeroes(builder b, int x) asm "STZEROES";
+builder store_ones(builder b, int x) asm "STONES";
+
+cell preload_first_ref(slice s) asm "0 PLDREFIDX";
+cell preload_second_ref(slice s) asm "1 PLDREFIDX";
+cell preload_third_ref(slice s) asm "2 PLDREFIDX";
+cell preload_fourth_ref(slice s) asm "3 PLDREFIDX";
+
+int get_ton_balance() asm "BALANCE FIRST";
+
+((int, int) -> ()) get_c2() asm "c2 PUSH";
+() set_c2(((int, int) -> ()) c) impure asm "c2 POP";
+() set_actions(cell actions) impure asm "c5 POP";
+() clean_actions() impure asm "<b b> PUSHREF c5 POP";

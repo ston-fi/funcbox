@@ -44,6 +44,17 @@ _ test_address::check_hashpart() impure inline {
     assert("check_hashpart #3", ~ my_addr2.address::check_hashpart(100));
 }
 
+_ test_address::is_type() impure inline {
+    slice my_addr = "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c"a;
+    slice my_addr1 = address::serialize_var(0, 128, 0);
+    slice my_addr2 = addr_none();
+
+    assert("is_type #0", my_addr.address::is_type(ADDR_TYPE_STD));
+    assert("is_type #1", my_addr1.address::is_type(ADDR_TYPE_VAR));
+    assert("is_type #2", my_addr2.address::is_type(ADDR_TYPE_NONE));
+}
+
+
 _ test_address() impure inline {
     test_address::get_hashpart();
     test_address::get_workchain();
@@ -51,4 +62,5 @@ _ test_address() impure inline {
     test_address::serialize();
     test_address::check_workchain();
     test_address::check_hashpart();
+    test_address::is_type();
 }

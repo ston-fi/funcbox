@@ -6,6 +6,13 @@
 
 ;; Params
 
+;; Address consts
+
+const ADDR_TYPE_NONE = 0;
+const ADDR_TYPE_EXTERN = 1;
+const ADDR_TYPE_STD = 2;
+const ADDR_TYPE_VAR = 3;
+
 const HOLE_ADDRESS = "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c"a;
 
 const int TRUE = -1;

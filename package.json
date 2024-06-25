@@ -1,6 +1,6 @@
 {
   "name": "@ston-fi/funcbox",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Collection of FunC snippets/utilities",
   "license": "MIT",
   "scripts": {
@@ -17,17 +17,17 @@
     "defi"
   ],
   "devDependencies": {
-    "@ton/blueprint": "^0.19.1",
-    "@ton/sandbox": "^0.19.0",
+    "@ton/blueprint": "^0.21.0",
+    "@ton/sandbox": "^0.20.0",
     "@ton/test-utils": "^0.4.2",
     "@ton-community/func-js": "^0.7.0",
     "@types/jest": "^29.5.12",
     "@ton/core": "^0.56.3",
-    "@types/node": "^20.12.8",
-    "glob": "^10.3.12",
-    "ts-jest": "^29.1.2",
+    "@types/node": "^20.14.7",
+    "glob": "^10.4.2",
+    "ts-jest": "^29.1.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5",
-    "prettier": "^3.2.5"
+    "typescript": "^5.5.2",
+    "prettier": "^3.3.2"
   }
 }

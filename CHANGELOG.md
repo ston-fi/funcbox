@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1] - 2024-06-24
+
+### Added
+
+- Add new address's related functions
+- Add new opcodes
+  
 ## [0.1.0] - 2024-05-02
 
 ### Added
