@@ -17,3 +17,4 @@
 #include "contracts/interfaces/interfaces.fc";
 #include "contracts/math/math.fc";  
 #include "contracts/console.fc"; 
+#include "contracts/message.fc"; 
