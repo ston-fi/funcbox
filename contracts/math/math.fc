@@ -70,6 +70,7 @@ const math::error::out_of_bounds         = 50005;
 const math::error::0_base                = 50006;
 const math::error::negative_power        = 50007;
 const math::error::zero_division         = 50008;
+const math::error::invalid_input         = 50009;
 const math::error::cmplment_out_of_range = 51002;
 
 

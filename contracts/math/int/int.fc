@@ -4,7 +4,9 @@
     This library provide functions for integer math. 
 -}
 
-int math::int::sqrt(int x) inline {
+int math::int::sqrt(int x) impure inline {
+    throw_if(math::error::invalid_input, x < 0);
+
     if (x == 0) { return x; }
 
     int r = 181;

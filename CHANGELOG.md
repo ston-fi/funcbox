@@ -1,11 +1,17 @@
 # Changelog
 
+
+## [0.1.3] - 2024-09-04
+
+### Changed
+
+- Fix `math::int::sqrt` function to handle negative numbers.
+
 ## [0.1.2] - 2024-08-23
 
 ### Added
 
 - Add new `message` library
-  
 
 ## [0.1.1] - 2024-06-24
 

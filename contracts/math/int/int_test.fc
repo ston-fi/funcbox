@@ -7,6 +7,13 @@
 _ test_math::int::sqrt() impure inline {
     assert("int::sqrt #0", math::int::sqrt(10000) == 100);
     assert("int::sqrt #1", math::int::sqrt(1000) == 31);
+    assert("int::sqrt #2", math::int::sqrt(0) == 0);
+    try {
+        assert("int::sqrt #3", math::int::sqrt(-100) + 1 );
+    } catch(_, _exit_code) {
+        _exit_code.to_int();
+        assert("int::sqrt #3.1", _exit_code == math::error::invalid_input);
+    }
 }
 
 _ test_math::int::pow() impure inline {
