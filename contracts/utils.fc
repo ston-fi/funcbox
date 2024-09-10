@@ -89,3 +89,37 @@ slice utils::number_to_slice(int number) inline {
 }
 
 (int) utils::to_coins(int _n) inline { return _n * 1000000000; }
+
+(cell) utils::merge_dicts(cell _first_dict, cell _second_dict, int _key_size) inline {
+    (int key, slice value, int is_found) = _second_dict.udict_get_min?(_key_size);
+    
+    if is_found {
+        _first_dict~udict_set(_key_size, key, value);
+    }
+
+    while (is_found) {
+        (key, value, is_found) = _second_dict.udict_get_next?(_key_size, key);
+        if is_found {
+            _first_dict~udict_set(_key_size, key, value);
+        }
+    }
+
+    return _first_dict;
+}
+
+(cell) utils::merge_idicts(cell _first_dict, cell _second_dict, int _key_size) inline {
+    (int key, slice value, int is_found) = _second_dict.idict_get_min?(_key_size);
+    
+    if is_found {
+        _first_dict~udict_set(_key_size, key, value);
+    }
+
+    while (is_found) {
+        (key, value, is_found) = _second_dict.idict_get_next?(_key_size, key);
+        if is_found {
+            _first_dict~idict_set(_key_size, key, value);
+        }
+    }
+
+    return _first_dict;
+}

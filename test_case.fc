@@ -9,6 +9,7 @@
     test_cell();
     test_stdlib_ext();
     test_time();
+    test_utils();
     
     return ();
 }

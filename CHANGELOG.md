@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.4] - 2024-09-10
+
+### Added
+
+- Add new `utils::merge_dict` helpers.
 
 ## [0.1.3] - 2024-09-04
 
