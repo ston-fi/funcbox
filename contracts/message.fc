@@ -400,3 +400,385 @@ _ message::get_raw_message(
 
     return ([_raw_message], _raw_message.end_cell());
 }
+
+;; constructor as modifier methods
+
+_ ~message::set_header(
+    [builder] _cntx, 
+    int _mode,
+    slice _to, 
+    int _amount
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(_mode, 6)
+        .store_slice(_to)
+        .store_coins(_amount);
+
+    return ([_raw_message], ());
+}
+
+_ ~message::set_empty_body(
+    [builder] _cntx
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(0, 107);
+
+    return ([_raw_message], ());
+}
+
+;; ref body mode
+
+_ ~message::set_body(
+    [builder] _cntx, 
+    cell _body 
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(1, 107)
+        .store_ref(_body);
+
+    return ([_raw_message], ());
+}
+
+_ ~message::set_body_state_init(
+    [builder] _cntx, 
+    cell _state_init, 
+    cell _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(7, 108)
+        .store_ref(_state_init)
+        .store_ref(_body);
+
+    return ([_raw_message], ());
+}
+
+;; builder mode body
+
+_ ~message::set_bbody(
+    [builder] _cntx, 
+    builder _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(0, 107)
+        .store_builder(_body);
+
+    return ([_raw_message], ());
+}
+
+
+_ ~message::set_bbody_state_init(
+    [builder] _cntx, 
+    cell _state_init, 
+    builder _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(6, 108)
+        .store_ref(_state_init)
+        .store_builder(_body);
+
+    return ([_raw_message], ());
+}
+
+;; slice mode body
+
+_ ~message::set_sbody(
+    [builder] _cntx, 
+    slice _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(0, 107)
+        .store_slice(_body);
+
+    return ([_raw_message], ());
+}
+
+_ ~message::set_sbody_state_init(
+    [builder] _cntx, 
+    cell _state_init, 
+    slice _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(6, 108)
+        .store_ref(_state_init)
+        .store_slice(_body);
+
+    return ([_raw_message], ());
+}
+
+;; one line methods
+
+_ ~message::empty(
+    [builder] _cntx, 
+    slice _to, 
+    int _amount, 
+    cell _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(SEND_MSG_BOUNCEABLE, 6)
+        .store_slice(_to)
+        .store_coins(_amount)
+        .store_uint(0, 107);
+
+    return ([_raw_message], ());
+}
+
+_ ~message::body(
+    [builder] _cntx, 
+    slice _to, 
+    int _amount, 
+    cell _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(SEND_MSG_BOUNCEABLE, 6)
+        .store_slice(_to)
+        .store_coins(_amount)
+        .store_uint(1, 107)
+        .store_ref(_body);
+
+    return ([_raw_message], ());
+}
+
+_ ~message::body_state_init(
+    [builder] _cntx, 
+    slice _to, 
+    int _amount, 
+    cell _state_init,
+    cell _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(SEND_MSG_BOUNCEABLE, 6)
+        .store_slice(_to)
+        .store_coins(_amount)
+        .store_uint(7, 108)
+        .store_ref(_state_init)
+        .store_ref(_body);
+
+    return ([_raw_message], ());
+}
+
+_ ~message::bbody(
+    [builder] _cntx, 
+    slice _to, 
+    int _amount, 
+    builder _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(SEND_MSG_BOUNCEABLE, 6)
+        .store_slice(_to)
+        .store_coins(_amount)
+        .store_uint(0, 107)
+        .store_builder(_body);
+
+    return ([_raw_message], ());
+}
+
+_ ~message::bbody_state_init(
+    [builder] _cntx, 
+    slice _to, 
+    int _amount, 
+    cell _state_init,
+    builder _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(SEND_MSG_BOUNCEABLE, 6)
+        .store_slice(_to)
+        .store_coins(_amount)
+        .store_uint(6, 108)
+        .store_ref(_state_init)
+        .store_builder(_body);
+
+    return ([_raw_message], ());
+}
+
+_ ~message::sbody(
+    [builder] _cntx, 
+    slice _to, 
+    int _amount, 
+    slice _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(SEND_MSG_BOUNCEABLE, 6)
+        .store_slice(_to)
+        .store_coins(_amount)
+        .store_uint(0, 107)
+        .store_slice(_body);
+
+    return ([_raw_message], ());
+}
+
+_ ~message::sbody_state_init(
+    [builder] _cntx, 
+    slice _to, 
+    int _amount, 
+    cell _state_init,
+    slice _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(SEND_MSG_BOUNCEABLE, 6)
+        .store_slice(_to)
+        .store_coins(_amount)
+        .store_uint(6, 108)
+        .store_ref(_state_init)
+        .store_slice(_body);
+
+    return ([_raw_message], ());
+}
+
+;; non bouncable messages 
+
+_ ~message::body_state_init_nobounce(
+    [builder] _cntx, 
+    slice _to, 
+    int _amount, 
+    cell _state_init,
+    cell _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(SEND_MSG_NON_BOUNCEABLE, 6)
+        .store_slice(_to)
+        .store_coins(_amount)
+        .store_uint(7, 108)
+        .store_ref(_state_init)
+        .store_ref(_body);
+
+    return ([_raw_message], ());
+}
+
+_ ~message::body_nobounce(
+    [builder] _cntx, 
+    slice _to, 
+    int _amount, 
+    cell _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(SEND_MSG_NON_BOUNCEABLE, 6)
+        .store_slice(_to)
+        .store_coins(_amount)
+        .store_uint(1, 107)
+        .store_ref(_body);
+
+    return ([_raw_message], ());
+}
+
+_ ~message::bbody_nobounce(
+    [builder] _cntx, 
+    slice _to, 
+    int _amount, 
+    builder _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(SEND_MSG_NON_BOUNCEABLE, 6)
+        .store_slice(_to)
+        .store_coins(_amount)
+        .store_uint(0, 107)
+        .store_builder(_body);
+
+    return ([_raw_message], ());
+}
+
+_ ~message::sbody_nobounce(
+    [builder] _cntx, 
+    slice _to, 
+    int _amount, 
+    slice _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(SEND_MSG_NON_BOUNCEABLE, 6)
+        .store_slice(_to)
+        .store_coins(_amount)
+        .store_uint(0, 107)
+        .store_slice(_body);
+
+    return ([_raw_message], ());
+}
+
+_ ~message::bbody_state_init_nobounce(
+    [builder] _cntx, 
+    slice _to, 
+    int _amount, 
+    cell _state_init,
+    builder _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(SEND_MSG_NON_BOUNCEABLE, 6)
+        .store_slice(_to)
+        .store_coins(_amount)
+        .store_uint(6, 108)
+        .store_ref(_state_init)
+        .store_builder(_body);
+
+    return ([_raw_message], ());
+}
+
+_ ~message::sbody_state_init_nobounce(
+    [builder] _cntx, 
+    slice _to, 
+    int _amount, 
+    cell _state_init,
+    slice _body
+) inline {
+    [builder _raw_message] = _cntx;
+
+    builder _raw_message = _raw_message
+        .store_uint(SEND_MSG_NON_BOUNCEABLE, 6)
+        .store_slice(_to)
+        .store_coins(_amount)
+        .store_uint(6, 108)
+        .store_ref(_state_init)
+        .store_slice(_body);
+
+    return ([_raw_message], ());
+}
+
+;; other methods 
+
+_ ~message::send(
+    [builder] _cntx, 
+    int _mode
+) impure inline {
+    [builder _raw_message] = _cntx;
+
+    send_raw_message(_raw_message.end_cell(), _mode);
+
+    return ([_raw_message], ());
+}

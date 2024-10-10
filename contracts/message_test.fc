@@ -1,0 +1,29 @@
+{-
+    message_test.fc 
+
+    Tests for message.fc
+-}
+
+_ test_message::modifier_methods() impure inline {
+    var msg0 = message::new();
+    msg0~message::body(
+        HOLE_ADDRESS,
+        0,
+        empty_cell()
+    );
+
+    var msg1 = message::new().message::body(
+        HOLE_ADDRESS,
+        0,
+        empty_cell()
+    );
+
+    assert("modifier_methods #0", 
+        equal_cells(msg0~message::get_raw_message(), msg1~message::get_raw_message()));
+}
+
+
+
+_ test_message() impure inline_ref {
+    test_message::modifier_methods();
+}

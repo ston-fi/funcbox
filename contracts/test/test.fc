@@ -5,3 +5,4 @@
 #include "../stdlib_ext_test.fc";
 #include "../time_test.fc";
 #include "../math/math_test.fc";
+#include "../message_test.fc";

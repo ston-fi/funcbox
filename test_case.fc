@@ -10,6 +10,7 @@
     test_stdlib_ext();
     test_time();
     test_utils();
+    test_message();
     
     return ();
 }

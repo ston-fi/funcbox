@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.5] - 2024-10-10
+
+### Added
+
+- Add modifier methods to `message` library.
+
 ## [0.1.4] - 2024-09-10
 
 ### Added
