@@ -45,6 +45,42 @@ _ test_stdlib_ext::store_status() impure inline {
         begin_cell().store_uint(0, 8).end_cell().cell_hash());
 }
 
+_ test_stdlib_ext::actions() impure inline {
+    cell actions_0 = get_actions();
+    assert("actions #0", equal_cells(actions_0, empty_cell()));
+
+    cell new_actions = begin_cell().store_uint(100000, 64).end_cell();
+    set_actions(new_actions);
+    assert("actions #1", equal_cells(get_actions(), new_actions));
+
+    clean_actions();
+    assert("actions #2", equal_cells(get_actions(), empty_cell()));
+
+    utils::send_excesses(0, ctx.at(SENDER), QCARRY_REMAINING_GAS);
+    assert("actions #3", ~ equal_cells(get_actions(), empty_cell()));
+
+    clean_actions(); 
+    assert("actions #4", equal_cells(get_actions(), empty_cell()));
+
+    raw_reserve(1, 0);
+    assert("actions #5", ~ equal_cells(get_actions(), empty_cell()));
+
+    clean_actions();
+    assert("actions #6", equal_cells(get_actions(), empty_cell()));
+
+    set_lib(my_code(), 2);
+    assert("actions #7", ~ equal_cells(get_actions(), empty_cell()));
+
+    clean_actions();
+    assert("actions #8", equal_cells(get_actions(), empty_cell()));
+
+    set_code(empty_cell());
+    assert("actions #9", ~ equal_cells(get_actions(), empty_cell()));
+
+    clean_actions();
+    assert("actions #10", equal_cells(get_actions(), empty_cell()));
+}
+
 _ test_stdlib_ext() impure inline_ref {
     test_stdlib_ext::begin_message();
     test_stdlib_ext::store_status(); 
@@ -54,4 +90,5 @@ _ test_stdlib_ext() impure inline_ref {
     test_stdlib_ext::get_gas_consumed();
     test_stdlib_ext::get_forward_fee();
     test_stdlib_ext::get_compute_fee();
+    test_stdlib_ext::actions();
 }

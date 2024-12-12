@@ -39,7 +39,11 @@ int __fp_math::ln_36(int _x) impure inline {
 }
 
 int __fp_math::ln(int _a) impure inline {
-    if _a < __math::ONE_18 { return negate(__fp_math::ln(muldiv(__math::ONE_18, __math::ONE_18, _a))); }
+    int should_negate = _a < __math::ONE_18;
+    if should_negate { 
+        ;; return negate(__fp_math::ln(muldiv(__math::ONE_18, __math::ONE_18, _a))); 
+        _a = muldiv(__math::ONE_18, __math::ONE_18, _a);
+    }
 
     int sum = 0;
     if _a >= __math::a0 * __math::ONE_18 {
@@ -129,7 +133,7 @@ int __fp_math::ln(int _a) impure inline {
     series_sum *= 2;
 
     int result = (sum + series_sum) / 100;
-    return result;
+    return should_negate ? negate(result) : result;
 }
 
 ;; public functions
@@ -211,6 +215,8 @@ int math::fp::log(int _arg, int _base) impure inline {
     throw_if(math::error::0_base, _base == 0);
     if _arg == __math::ONE_18 { return 0; }
 
+    throw_unless(math::error::out_of_bounds, _arg > 0);
+
     int log_base = 0;
     if (__math::LN_36_LOWER_BOUND < _base) & (_base < __math::LN_36_UPPER_BOUND) {
         log_base = __fp_math::ln_36(_base);
@@ -234,7 +240,18 @@ int math::fp::exp(int _x) impure inline {
     throw_unless(math::error::invalid_exponent, 
         (_x >= __math::MIN_NATURAL_EXPONENT) & (_x <= __math::MAX_NATURAL_EXPONENT));
 
-    if _x < 0 { return muldiv(__math::ONE_18, __math::ONE_18, math::fp::exp(_x.negate())); }
+    int should_negate = _x < 0;
+    if should_negate { 
+        ;; return muldiv(__math::ONE_18, __math::ONE_18, math::fp::exp(_x.negate())); 
+        _x = negate(_x);
+
+        if _x == __math::ONE_18 { 
+            return muldiv(__math::ONE_18, __math::ONE_18, __math::e); 
+        }
+
+        throw_unless(math::error::invalid_exponent, 
+            (_x >= __math::MIN_NATURAL_EXPONENT) & (_x <= __math::MAX_NATURAL_EXPONENT));
+    }
 
     int first_AN = 0;
     if _x >= __math::x0 {
@@ -319,8 +336,10 @@ int math::fp::exp(int _x) impure inline {
 
     term = muldiv(term, _x, __math::ONE_20 * 12);
     series_sum += term;
-    
-    return muldiv(muldiv(product, series_sum, __math::ONE_20), first_AN, 100);
+
+    int result = muldiv(muldiv(product, series_sum, __math::ONE_20), first_AN, 100);
+
+    return should_negate ? muldiv(__math::ONE_18, __math::ONE_18, result) : result;
 }
 
 ;; _x and _y should have 18 decimals -> returns with 18 decimals

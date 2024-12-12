@@ -16,6 +16,18 @@ _ dict::iset([int, cell] cntr, slice _data, int _index) inline {
     return [_key_len, _cell?];
 }
 
+_ dict::set_b([int, cell] cntr, builder _data, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    _cell?~udict_set_builder(_key_len, _index, _data);
+    return [_key_len, _cell?];
+}
+
+_ dict::iset_b([int, cell] cntr, builder _data, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    _cell?~idict_set_builder(_key_len, _index, _data);
+    return [_key_len, _cell?];
+}
+
 _ dict::iset_ref([int, cell] cntr, cell _data, int _index) inline {
     [int _key_len, cell _cell?] = cntr; 
     _cell?~idict_set_ref(_key_len, _index, _data);
@@ -114,6 +126,18 @@ _ ~dict::set([int, cell] cntr, slice _data, int _index) inline {
     return ([_key_len, _cell?], ());
 }
 
+_ ~dict::iset_b([int, cell] cntr, builder _data, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    _cell?~idict_set_builder(_key_len, _index, _data);
+    return ([_key_len, _cell?], ());
+}
+
+_ ~dict::set_b([int, cell] cntr, builder _data, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    _cell?~udict_set_builder(_key_len, _index, _data);
+    return ([_key_len, _cell?], ());
+}
+
 _ dict::replace([int, cell] cntr, slice _data, int _index) inline {
     [int _key_len, cell _cell?] = cntr; 
     int replaced? = _cell?~udict_replace?(_key_len, _index, _data);
@@ -124,4 +148,59 @@ _ ~dict::replace([int, cell] cntr, slice _data, int _index) inline {
     [int _key_len, cell _cell?] = cntr; 
     int replaced? = _cell?~udict_replace?(_key_len, _index, _data);
     return ([_key_len, _cell?], replaced?);
+}
+
+_ dict::ireplace([int, cell] cntr, slice _data, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    int replaced? = _cell?~idict_replace?(_key_len, _index, _data);
+    return ([_key_len, _cell?], replaced?);
+}
+
+_ ~dict::ireplace([int, cell] cntr, slice _data, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    int replaced? = _cell?~idict_replace?(_key_len, _index, _data);
+    return ([_key_len, _cell?], replaced?);
+}
+
+
+_ dict::add([int, cell] cntr, slice _data, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    int added? = _cell?~udict_add?(_key_len, _index, _data);
+    return ([_key_len, _cell?], added?);
+}
+
+_ ~dict::add([int, cell] cntr, slice _data, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    int added? = _cell?~udict_add?(_key_len, _index, _data);
+    return ([_key_len, _cell?], added?);
+}
+
+_ dict::iadd([int, cell] cntr, slice _data, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    int added? = _cell?~idict_add?(_key_len, _index, _data);
+    return ([_key_len, _cell?], added?);
+}
+
+_ ~dict::iadd([int, cell] cntr, slice _data, int _index) inline {
+    [int _key_len, cell _cell?] = cntr; 
+    int added? = _cell?~idict_add?(_key_len, _index, _data);
+    return ([_key_len, _cell?], added?);
+}
+
+int dict::equal_raw(cell _a, cell _b) inline {
+    if (is_null(_a)) { return is_null(_b); }
+    elseif (is_null(_b)) { return false; }
+
+    return equal_cells(_a, _b);
+}
+
+int dict::equal([int, cell] cntr_a, [int, cell] cntr_b) inline {
+    [int _key_len_a, cell _cell_a?] = cntr_a;
+    [int _key_len_b, cell _cell_b?] = cntr_b;
+
+    return (_key_len_a == _key_len_b) & dict::equal_raw(_cell_a?, _cell_b?);
+}
+
+[int, cell] dict::new(int _key_len) inline {
+    return [_key_len, new_dict()];
 }

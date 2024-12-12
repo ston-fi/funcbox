@@ -1,0 +1,76 @@
+{-
+    actions_test.fc 
+
+    Tests for actions.fc
+-}
+
+_ test_actions::begin_action() impure inline {
+    var action = begin_action(0xFFFF).end_cell().begin_parse();
+
+    assert("begin_action #0", action~load_uint(32) == 0xFFFF);
+    assert("begin_action #1", action.slice_bits() == 0);
+    assert("begin_action #2", action.slice_refs() == 0);
+}
+
+_ test_actions::out_list() impure inline {
+    tuple actions = empty_tuple();
+
+    set_code(begin_cell().store_uint(1, 2).end_cell());
+    actions~tpush(actions::set_code(begin_cell().store_uint(1, 2).end_cell()));
+
+    cell out_list = actions::pack_out_list(actions);
+    assert("out_list #0", equal_cells(get_actions(), out_list));
+
+    set_code(begin_cell().store_uint(4, 4).end_cell());
+    actions~tpush(actions::set_code(begin_cell().store_uint(4, 4).end_cell()));
+
+    out_list = actions::pack_out_list(actions);
+    assert("out_list #1", equal_cells(get_actions(), out_list));
+
+    utils::send_excesses(0, ctx.at(SENDER), QCARRY_REMAINING_GAS);
+
+    var msg = begin_cell().store_uint(0x10, 6).store_slice(ctx.at(SENDER))
+        .store_coins(0).store_uint(0, 107)
+        .store_uint(op::excesses, 32).store_uint(ctx.at(QUERY_ID), 64);
+
+    actions~tpush(actions::send_msg(QCARRY_REMAINING_GAS, msg.end_cell()));
+    out_list = actions::pack_out_list(actions);
+    assert("out_list #2", equal_cells(get_actions(), out_list));
+
+    raw_reserve(1000000, 2);
+    actions~tpush(actions::reserve_currency(2, 1000000));
+    out_list = actions::pack_out_list(actions);
+    assert("out_list #3", equal_cells(get_actions(), out_list));
+
+    raw_reserve(100000000, 0);
+    actions~tpush(actions::reserve_currency(0, 100000000));
+    out_list = actions::pack_out_list(actions);
+    assert("out_list #4", equal_cells(get_actions(), out_list));
+
+    set_lib(my_code(), 2);
+    actions~tpush(actions::set_library(2, my_code()));
+    out_list = actions::pack_out_list(actions);
+    assert("out_list #5", equal_cells(get_actions(), out_list));
+
+    change_lib(123123123, 0);
+    actions~tpush(actions::change_library(0, 123123123));
+    out_list = actions::pack_out_list(actions);
+    assert("out_list #6", equal_cells(get_actions(), out_list));
+
+    raw_reserve_extra(100000000, new_dict(), 1);
+    actions~tpush(actions::reserve_extra_currency(1, 100000000, new_dict()));
+    out_list = actions::pack_out_list(actions);
+    assert("out_list #7", equal_cells(get_actions(), out_list));
+
+    set_code(my_code());
+    assert("out_list #8", ~ equal_cells(get_actions(), out_list));
+
+    clean_actions();
+
+    assert("out_list #9", equal_cells(get_actions(), actions::pack_out_list(empty_tuple())));
+}
+
+_ test_actions() impure inline_ref {
+    test_actions::begin_action();
+    test_actions::out_list();
+} 

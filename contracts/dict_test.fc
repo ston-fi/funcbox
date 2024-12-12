@@ -1,0 +1,166 @@
+{-
+    dict_test.fc 
+
+    Tests for dict.fc
+-}
+
+_ test_dict::dict_new() impure inline {
+    var dict = dict::new(8);
+    assert("dict::new #0", (dict.dict::get_key_len() == 8) & is_null(dict.dict::get_cell()));
+
+    var dict1 = dict::new(256);
+    assert("dict::new #1", (dict1.dict::get_key_len() == 256) & is_null(dict1.dict::get_cell()));
+}
+
+_ test_dict::unsigned_modifier_methods() impure inline {
+    int keylen = 8;
+    var dict_a = dict::new(keylen);
+    cell dict_b = new_dict();
+
+    slice value_slice = "value_slice";
+
+    dict_a~dict::set(value_slice, 0);
+    dict_b~udict_set(keylen, 0, value_slice);
+
+    assert("dict::unsigned_modifier_methods #0", equal_cells(dict_a.dict::get_cell(), dict_b));
+
+    cell value_cell = begin_cell().store_slice("value_cell").end_cell();
+
+    dict_a~dict::set_ref(value_cell, 1);
+    dict_b~udict_set_ref(keylen, 1, value_cell);
+    assert("dict::unsigned_modifier_methods #1", equal_cells(dict_a.dict::get_cell(), dict_b));
+
+    builder value_builder = begin_cell().store_slice("value_builder");
+
+    dict_a~dict::set_b(value_builder, 2);
+    dict_b~udict_set_builder(keylen, 2, value_builder);
+    assert("dict::unsigned_modifier_methods #2", equal_cells(dict_a.dict::get_cell(), dict_b));
+
+    (slice data_0, int found_0) = dict_a.dict::get(0);
+    assert("dict::unsigned_modifier_methods #3", found_0 & equal_slices(data_0, value_slice));
+
+    int deleted = dict_a~dict::delete(0);
+    assert("dict::unsigned_modifier_methods #4", deleted);
+
+    (slice data_1, int found_1) = dict_a.dict::get(0);
+    assert("dict::unsigned_modifier_methods #5", (~ found_1) & is_null(data_1));
+
+    int replaced_0 = dict_a~dict::replace(value_slice, 0);
+    assert("dict::unsigned_modifier_methods #6", ~ replaced_0);
+
+    int added_0 = dict_a~dict::add(value_slice, 0);
+    assert("dict::unsigned_modifier_methods #7", added_0);
+
+    (slice data_2, int found_2) = dict_a.dict::get(0);
+    assert("dict::unsigned_modifier_methods #8", found_2 & equal_slices(data_2, value_slice));
+
+    int added_1 = dict_a~dict::add("value_added", 0);
+    assert("dict::unsigned_modifier_methods #9", ~ added_1);
+
+    int replaced_1 = dict_a~dict::replace("value_replaced", 0);
+    assert("dict::unsigned_modifier_methods #10", replaced_1);
+
+    (slice data_3, int found_3) = dict_a.dict::get(0);
+    assert("dict::unsigned_modifier_methods #11", found_3 & equal_slices(data_3, "value_replaced")); 
+}
+
+_ test_dict::signed_modifier_methods() impure inline {
+    int keylen = 8;
+    var dict_a = dict::new(keylen);
+    cell dict_b = new_dict();
+
+    slice value_slice = "value_slice";
+
+    dict_a~dict::iset(value_slice, 0);
+    dict_b~idict_set(keylen, 0, value_slice);
+
+    assert("dict::signed_modifier_methods #0", equal_cells(dict_a.dict::get_cell(), dict_b));
+
+    cell value_cell = begin_cell().store_slice("value_cell").end_cell();
+
+    dict_a~dict::iset_ref(value_cell, 1);
+    dict_b~idict_set_ref(keylen, 1, value_cell);
+    assert("dict::signed_modifier_methods #1", equal_cells(dict_a.dict::get_cell(), dict_b));
+
+    builder value_builder = begin_cell().store_slice("value_builder");
+
+    dict_a~dict::iset_b(value_builder, 2);
+    dict_b~idict_set_builder(keylen, 2, value_builder);
+    assert("dict::signed_modifier_methods #2", equal_cells(dict_a.dict::get_cell(), dict_b));
+
+    (slice data_0, int found_0) = dict_a.dict::iget(0);
+    assert("dict::signed_modifier_methods #3", found_0 & equal_slices(data_0, value_slice));
+
+    int deleted = dict_a~dict::idelete(0);
+    assert("dict::signed_modifier_methods #4", deleted);
+
+    (slice data_1, int found_1) = dict_a.dict::iget(0);
+    assert("dict::signed_modifier_methods #5", (~ found_1) & is_null(data_1));
+
+    int replaced_0 = dict_a~dict::ireplace(value_slice, 0);
+    assert("dict::signed_modifier_methods #6", ~ replaced_0);
+
+    int added_0 = dict_a~dict::iadd(value_slice, 0);
+    assert("dict::signed_modifier_methods #7", added_0);
+
+    (slice data_2, int found_2) = dict_a.dict::iget(0);
+    assert("dict::signed_modifier_methods #8", found_2 & equal_slices(data_2, value_slice));
+
+    int added_1 = dict_a~dict::iadd("value_added", 0);
+    assert("dict::signed_modifier_methods #9", ~ added_1);
+
+    int replaced_1 = dict_a~dict::ireplace("value_replaced", 0);
+    assert("dict::signed_modifier_methods #10", replaced_1);
+
+    (slice data_3, int found_3) = dict_a.dict::iget(0);
+    assert("dict::signed_modifier_methods #11", found_3 & equal_slices(data_3, "value_replaced")); 
+}
+
+_ test_dict::equal_raw() impure inline {
+    int keylen = 8;
+    cell dict_a = new_dict();
+    cell dict_b = new_dict();
+    assert("dict::equal_raw #0", dict::equal_raw(dict_a, dict_b));
+
+    dict_a~udict_set(keylen, 0, "value");
+    assert("dict::equal_raw #1", ~ dict::equal_raw(dict_a, dict_b));
+    assert("dict::equal_raw #2", ~ dict::equal_raw(dict_b, dict_a));
+
+    dict_b~udict_set(keylen, 0, "value");
+    assert("dict::equal_raw #3", dict::equal_raw(dict_a, dict_b));
+    assert("dict::equal_raw #4", dict::equal_raw(dict_b, dict_a));
+
+    dict_a~udict_set(keylen, 1, "value_1");
+    dict_b~udict_set(keylen, 1, "value_2");
+
+    assert("dict::equal_raw #5", ~ dict::equal_raw(dict_a, dict_b));
+    assert("dict::equal_raw #6", ~ dict::equal_raw(dict_b, dict_a));
+
+    dict_b~udict_set(keylen, 1, "value_1");
+    assert("dict::equal_raw #7", dict::equal_raw(dict_a, dict_b));
+    assert("dict::equal_raw #8", dict::equal_raw(dict_b, dict_a));
+}
+
+_ test_dict::equal() impure inline {
+    assert("dict::equal #0", dict::equal(dict::new(8), dict::new(8)));
+    assert("dict::equal #1", ~ dict::equal(dict::new(16), dict::new(256)));
+
+    var dict_a = dict::new(8);
+    var dict_b = dict::new(8);
+    dict_a~dict::set("value", 0);
+
+    assert("dict::equal #2", ~ dict::equal(dict_a, dict_b));
+    assert("dict::equal #3", ~ dict::equal(dict_b, dict_a));
+
+    dict_b~dict::set("value", 0);
+    assert("dict::equal #4", dict::equal(dict_a, dict_b));
+    assert("dict::equal #5", dict::equal(dict_b, dict_a));
+}
+
+_ test_dict() impure inline_ref {
+    test_dict::dict_new();
+    test_dict::unsigned_modifier_methods();
+    test_dict::signed_modifier_methods();
+    test_dict::equal_raw();
+    test_dict::equal();
+}

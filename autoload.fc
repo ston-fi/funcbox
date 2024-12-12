@@ -18,3 +18,4 @@
 #include "contracts/math/math.fc";  
 #include "contracts/console.fc"; 
 #include "contracts/message.fc"; 
+#include "contracts/actions.fc"; 

@@ -69,6 +69,7 @@ forall X -> cell  cast_to_cell(X x) asm "NOP";
 forall X -> slice cast_to_slice(X x) asm "NOP";
 forall X -> int   cast_to_int(X x) asm "NOP";
 forall X -> tuple cast_to_tuple(X x) asm "NOP";
+forall X -> builder cast_to_builder(X x) asm "NOP";
 
 ;; TVM Upgrade 2023.07
 (cell) my_code() asm "MYCODE";
@@ -130,3 +131,6 @@ int get_ton_balance() asm "BALANCE FIRST";
 () set_c2(((int, int) -> ()) c) impure asm "c2 POP";
 () set_actions(cell actions) impure asm "c5 POP";
 () clean_actions() impure asm "<b b> PUSHREF c5 POP";
+cell get_actions() impure asm "c5 PUSH";
+
+cell get_config() asm "CONFIGROOT";

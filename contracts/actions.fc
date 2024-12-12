@@ -1,0 +1,63 @@
+{-
+    actions.fc
+
+    This module contains functions for working with c5 actions.
+-}
+
+{-
+    out_list_empty$_ = OutList 0;
+    out_list$_ {n:#} prev:^(OutList n) action:OutAction = OutList (n + 1);
+-}
+cell actions::pack_out_list(tuple action_list) inline {
+    builder root = begin_cell();
+
+    int i = 0;
+    repeat (action_list.tlen()) {
+        builder out_action = action_list.at(i);
+        root = begin_cell().store_ref(root.end_cell()).store_builder(out_action);
+
+        i += 1;
+    }
+
+    return root.end_cell();
+}
+
+builder begin_action(int tag) inline {
+    return begin_cell().store_uint(tag, 32);
+}
+
+;; action_send_msg#0ec3c86d mode:(## 8) out_msg:^(MessageRelaxed Any) = OutAction;
+builder actions::send_msg(int mode, cell out_msg) inline {
+    return begin_action(SEND_MSG_ACTION_TAG).store_uint(mode, 8).store_ref(out_msg);
+}
+
+;; action_set_code#ad4de08e new_code:^Cell = OutAction;
+builder actions::set_code(cell new_code) inline {
+    return begin_action(SET_CODE_ACTION_TAG).store_ref(new_code);
+}
+
+{-
+    extra_currencies$_ dict:(HashmapE 32 (VarUInteger 32)) = ExtraCurrencyCollection;
+    currencies$_ grams:Grams other:ExtraCurrencyCollection = CurrencyCollection;
+    action_reserve_currency#36e6b809 mode:(## 8) currency:CurrencyCollection = OutAction;
+-}
+builder actions::reserve_currency(int mode, int amount) inline {
+    return begin_action(RESERVE_CURRENCY_ACTION_TAG).store_uint(mode, 8).store_coins(amount).store_dict(null());
+}
+
+builder actions::reserve_extra_currency(int mode, int ton_amount, cell extra_currency) inline {
+    return begin_action(RESERVE_CURRENCY_ACTION_TAG).store_uint(mode, 8).store_coins(ton_amount).store_dict(extra_currency);
+}
+
+{-
+    libref_hash$0 lib_hash:bits256 = LibRef;
+    libref_ref$1 library:^Cell = LibRef;
+    action_change_library#26fa1dd4 mode:(## 7) libref:LibRef = OutAction;
+-}
+builder actions::set_library(int mode, cell libref) inline {
+    return begin_action(CHANGE_LIBRARY_ACTION_TAG).store_uint((mode << 1) + 1, 8).store_ref(libref);
+}
+
+builder actions::change_library(int mode, int lib_hash) inline {
+    return begin_action(CHANGE_LIBRARY_ACTION_TAG).store_uint((mode << 1), 8).store_uint(lib_hash, 256);
+}

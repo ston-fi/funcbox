@@ -9,10 +9,9 @@ _ test_math::int::sqrt() impure inline {
     assert("int::sqrt #1", math::int::sqrt(1000) == 31);
     assert("int::sqrt #2", math::int::sqrt(0) == 0);
     try {
-        assert("int::sqrt #3", math::int::sqrt(-100) + 1 );
-    } catch(_, _exit_code) {
-        _exit_code.to_int();
-        assert("int::sqrt #4", _exit_code == math::error::invalid_input);
+        assert("int::sqrt #3", math::int::sqrt(-100) + 1);
+    } catch(_, int exit_code) {
+        assert("int::sqrt #4", exit_code == math::error::invalid_input);
     }
 
     ;; perfect square roots
@@ -86,9 +85,22 @@ _ test_math::int::sqrt() impure inline {
 _ test_math::int::pow() impure inline {
     assert("int::pow #0", math::int::pow(10000, 3) == 1000000000000);
     assert("int::pow #1", math::int::pow(143, 20) == 12785589283244544365936086134520496196408001);
+    
+    assert("int::pow #2", math::int::pow(1, 1000) == 1);
+    assert("int::pow #3", math::int::pow(0, 1) == 0);
+    assert("int::pow #4", math::int::pow(999, 1) == 999);
+    assert("int::pow #5", math::int::pow(0, 0) == 1);
+    assert("int::pow #6", math::int::pow(-2, 8) == 256);
+    assert("int::pow #7", math::int::pow(-2, 9) == -512);
+    
+    try {
+        assert("int::pow #8", math::int::pow(10, -1));
+    } catch(_, int exit_code) {
+        assert("int::pow #9", exit_code == math::error::negative_power);
+    }
 }
 
 _ test::int() impure inline {
-    test_math::int::sqrt(); 
+    test_math::int::sqrt();
     test_math::int::pow();
 }   

@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.1.7] - 2024-12-12
+
+### Added
+
+- Add `actions.fc` library for working with c5 register
+- Add `get_actions`, `get_config` and `cast_to_builder` functions to `stdlib_ext`
+- Add new `utils::make_c7` helper
+- Add new dict functions
+- Add new constants related co c7 actions
+- Add more new tests
+
+### Fixed
+
+- Fix `math::fp::log` for negative numbers
+- Removed all `method_id` modifiers
+- All recursive functions rewritten to be non-recursive to save contract size after including `autoload.fc` file
+
+### Changed
+
+- Test suite rewritten to `@ton/sandbox` message-based approach
+
 ## [0.1.6] - 2024-11-22
 
 ### Changed
@@ -200,7 +221,8 @@
 ### Added
 
 - Add initial library release
-- 
+
+[0.1.7]: https://github.com/ston-fi/funcbox/tree/v0.1.7
 [0.1.0]: https://github.com/ston-fi/funcbox/tree/v0.1.0
 [0.0.15]: https://github.com/ston-fi/funcbox/tree/v0.0.15
 [0.0.14]: https://github.com/ston-fi/funcbox/tree/v0.0.14

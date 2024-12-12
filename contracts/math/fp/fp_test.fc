@@ -6,6 +6,24 @@
 
 _ test_math::fp::ln() impure inline {
     assert("fp::ln #0", math::fp::ln(math::fp::from(10)) == 2302585092994045683);      
+
+    assert("fp::ln #1", math::fp::ln(math::E) == math::ONE_DEC);
+
+    assert("fp::ln #2", math::fp::ln(math::ONE_DEC) == 0);
+
+    try {
+        assert("fp::ln #3", math::fp::ln(0));
+    } catch(_, int exit_code) {
+        assert("fp::ln #4", exit_code == math::error::out_of_bounds);
+    }
+
+    try {
+        assert("fp::ln #5", math::fp::ln(-1));
+    } catch(_, int exit_code) {
+        assert("fp::ln #6", exit_code == math::error::out_of_bounds);
+    }
+
+    assert("fp::ln #7", math::fp::ln(500000000000000000) == -693147180559945309);
 }
 
 _ test_math::fp::log() impure inline {
@@ -13,23 +31,190 @@ _ test_math::fp::log() impure inline {
             math::fp::from(10),
             math::fp::from(5)
         ) == 1430676558073393050);      
+
+    assert("fp::log #1", math::fp::log(math::fp::from(1), math::fp::from(5)) == 0);
+
+    try {
+        assert("fp::log #2", math::fp::log(math::fp::from(10), 0));
+    } catch(_, int exit_code) {
+        assert("fp::log #3", exit_code == math::error::0_base);
+    }
+
+    assert("fp::log #4", math::fp::log(
+            math::fp::from(10),
+            math::fp::from(10)
+        ) == math::ONE_DEC);
+
+    ;; Test log_2(8) = 3
+    ;; TODO: fix
+    ;; expected: 3000000000000000000
+    ;; received: 3000000000000000001
+    ;; assert("fp::log #5", math::fp::log(
+    ;;         math::fp::from(8),
+    ;;         math::fp::from(2)
+    ;;     ) == math::fp::from(3));
+
+    ;; TODO: fix
+    ;; expected: 6000000000000000000
+    ;; received: 6000000000000000001
+    ;; assert("fp::log #6", math::fp::log(
+    ;;         math::fp::from(729),
+    ;;         math::fp::from(3)
+    ;;     ) == math::fp::from(6));
+
+    ;; TODO: fix
+    ;; expected: 9000000000000000000
+    ;; received: 9000000000000000004
+    ;; assert("fp::log #7", math::fp::log(
+    ;;         math::fp::from(512),
+    ;;         math::fp::from(2)
+    ;;     ) == math::fp::from(9));
+
+    try {
+        assert("fp::log #8", math::fp::log(math::fp::from(-1), math::fp::from(-1)));
+    } catch(_, int exit_code) {
+        assert("fp::log #9", exit_code == math::error::out_of_bounds);
+    }
 }
 
 _ test_math::fp::exp() impure inline {
     assert("fp::exp #0", math::fp::exp(
-            math::fp::from(10)) == 22026465794806716516930);      
+            math::fp::from(10)) == 22026465794806716516930);
+    assert("fp::exp #1", math::fp::exp(math::fp::from(0)) == 1000000000000000000);
+
+    assert("fp::exp #2", math::fp::exp(math::ONE_DEC) == math::E);
+
+    assert("fp::exp #3", math::fp::exp(- math::ONE_DEC) == 367879441171442321);  ;; ≈ 1/e
+
+    try {
+        assert("fp::exp #4", math::fp::exp(130000000000000000000 + 1));
+    } catch(_, int exit_code) {
+        assert("fp::exp #5", exit_code == math::error::invalid_exponent);
+    }
+
+    try {
+        assert("fp::exp #6", math::fp::exp(-41000000000000000000 - 1));
+    } catch(_, int exit_code) {
+        assert("fp::exp #7", exit_code == math::error::invalid_exponent);
+    }
+
+    assert("fp::exp #8", math::fp::exp(500000000000000000) == 1648721270700128146);
 }
 
 _ test_math::fp::pow() impure inline {
     assert("fp::pow #0", math::fp::pow(
             math::fp::from(323),
             math::fp::from(22)
-        ) == 15938795234306217177076873485360043910303022847486610614966008843041200000);      
+        ) == 15938795234306217177076873485360043910303022847486610614966008843041200000);
+
+    assert("fp::pow #1", math::fp::pow(math::fp::from(2), math::fp::from(0)) == 1000000000000000000);
+
+    assert("fp::pow #2", math::fp::pow(math::fp::from(2), math::fp::from(-1)) == 500000000000000000);
+
+
+    assert("fp::pow #3", math::fp::pow(math::fp::from(0), math::fp::from(2)) == 0);
+
+    try {
+        assert("fp::pow #4", math::fp::pow(math::fp::from(-1), math::fp::from(2)));
+    } catch(_, int _exit_code) {
+        assert("fp::pow #5", _exit_code == math::error::x_out_of_bounds);
+    }
+
+    try {
+        assert("fp::pow #6", math::fp::pow(math::fp::from(2), __math::MILD_EXPONENT_BOUND));
+    } catch(_, int _exit_code) {
+        assert("fp::pow #7", _exit_code == math::error::y_out_of_bounds);
+    }
+
+    ;; Test large base with small exponent
+    ;; TODO: fix
+    ;; expected: 999998000001000000000000000000
+    ;; received: 999998000000999998411182928673
+    ;; assert("fp::pow #8", math::fp::pow(
+    ;;         math::fp::from(999999),
+    ;;         math::fp::from(2)
+    ;;     ) == 999998000001000000000000000000);
+
+    ;; Test medium base with medium exponent
+    ;; TODO: fix
+    ;; expected: 100000000000000000000000000
+    ;; received:  99999999999999999578156123
+    ;; assert("fp::pow #9", math::fp::pow(
+    ;;         math::fp::from(100),
+    ;;         math::fp::from(4)
+    ;;     ) == 100000000000000000000000000);
+
+    ;; Test fractional base with large exponent
+    assert("fp::pow #10", math::fp::pow(
+            500000000000000000,  ;; 0.5
+            math::fp::from(3)
+        ) == 125000000000000000);
+
+    try {
+        assert("fp::pow #11", math::fp::pow(
+                100000000000000,  ;; 0.0001
+                math::fp::from(1000)
+            ));
+    } catch(_, int _exit_code) {
+        assert("fp::pow #12", _exit_code == math::error::product_out_of_bounds);
+    }
+
+    assert("fp::pow #13", math::fp::pow(
+            math::fp::from(1000),
+            math::fp::from(-2)
+        ) == 1000000000000);  ;; 0.000001
+}
+
+_ test_math::fp::pow_dec() impure inline {
+    assert("fp::pow_dec #0", math::fp::pow_dec(math::fp::from(10), 2) == 100000000000000000000);
+
+    assert("fp::pow_dec #1", math::fp::pow_dec(math::fp::from(10), 0) == 1000000000000000000);
+
+    try {
+        assert("fp::pow_dec #2", math::fp::pow_dec(math::fp::from(2), -1));
+    } catch(_, int _exit_code) {
+        assert("fp::pow_dec #3", _exit_code == math::error::negative_power);
+    }
+
+    assert("fp::pow_dec #4", math::fp::pow_dec(math::fp::from(10), 1) == 10000000000000000000);
+    assert("fp::pow_dec #5", math::fp::pow_dec(math::fp::from(0), 23) == 0);
+
+    assert("fp::pow_dec #6", math::fp::pow_dec(math::fp::from(999999), 3) == 999997000002999999000000000000000000);
+    assert("fp::pow_dec #7", math::fp::pow_dec(math::fp::from(123456), 4) == 232299784284558852096000000000000000000);
 }
 
 _ test_math::fp::div_up() impure inline {
     assert("fp::div_up #0", math::fp::div_up(
-            math::fp::from(10), math::fp::from(3)) == 3333333333333333334);      
+            math::fp::from(10), math::fp::from(3)) == 3333333333333333334);
+
+    try {
+        assert("fp::div_up #1", math::fp::div_up(math::fp::from(1), math::fp::from(0)));
+    } catch(_, int _exit_code) {
+        assert("fp::div_up #2", _exit_code == math::error::zero_division);
+    }
+
+    assert("fp::div_up #3", math::fp::div_up(math::fp::from(0), math::fp::from(5)) == 0);
+
+    ;; Throw on intermediate overflow
+    try {
+        assert("fp::div_up #4", math::fp::div_up(1157920892373161954235709850086879078532699846656405640394570, 1157920892373161954235709850086879078532699));
+    } catch(_, int _exit_code) {
+        assert("fp::div_up #5", _exit_code == 4);
+    }
+}
+
+_ test_math::fp::mul_up() impure inline {
+    assert("fp::mul_up #0", math::fp::mul_up(math::fp::from(10), 3000000000000000000) == 30000000000000000000);
+
+    assert("fp::mul_up #1", math::fp::mul_up(math::fp::from(0), math::fp::from(5)) == 0);
+    assert("fp::mul_up #2", math::fp::mul_up(math::fp::from(5), math::fp::from(0)) == 0);
+
+    ;; Throw on intermediate overflow
+    try {
+        assert("fp::mul_up #3", math::fp::mul_up(1157920892373161954235709850086879078532699846656405640394570, math::fp::from(1)));
+    } catch(_, int _exit_code) {
+        assert("fp::mul_up #4", _exit_code == 4);
+    }
 }
 
 _ test::fp() impure inline {
@@ -37,5 +222,7 @@ _ test::fp() impure inline {
     test_math::fp::log();
     test_math::fp::exp();
     test_math::fp::pow();
+    test_math::fp::pow_dec();
     test_math::fp::div_up();
+    test_math::fp::mul_up();
 }

@@ -54,6 +54,19 @@ _ test_address::is_type() impure inline {
     assert("is_type #2", my_addr2.address::is_type(ADDR_TYPE_NONE));
 }
 
+_ test_address::is_hole() impure inline {
+    slice hole_addr = "0:0000000000000000000000000000000000000000000000000000000000000000"a;
+    slice not_hole_addr = "-1:0000000000000000000000000000000000000000000000000000000000000000"a;
+
+    assert("is_hole #0", hole_addr.address::is_hole());
+    assert("is_hole #1", ~ not_hole_addr.address::is_hole());
+}
+
+_ test_address::serialize_none() impure inline {
+    assert("serialize_none #0", equal_slices(address::serialize_none(), addr_none()));
+    assert("serialize_none #1", ~ equal_slices(address::serialize_none(), "0:0000000000000000000000000000000000000000000000000000000000000000"a));
+}
+
 
 _ test_address() impure inline {
     test_address::get_hashpart();
@@ -63,4 +76,6 @@ _ test_address() impure inline {
     test_address::check_workchain();
     test_address::check_hashpart();
     test_address::is_type();
+    test_address::is_hole();
+    test_address::serialize_none();
 }

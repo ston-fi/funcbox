@@ -67,3 +67,9 @@ const EXTRN_DO_NOT_FAIL  = 2;
 const BALANCE_INCREASED  = 4;
 const BALANCE_DECREASED  = 8;
 const int RESERVE_BOUNCE_ON_ACTION_FAIL = 16;
+
+;; Action tags. See ./actions.fc for more
+const SEND_MSG_ACTION_TAG = 0x0ec3c86d;
+const SET_CODE_ACTION_TAG = 0xad4de08e;
+const RESERVE_CURRENCY_ACTION_TAG = 0x36e6b809;
+const CHANGE_LIBRARY_ACTION_TAG = 0x26fa1dd4;

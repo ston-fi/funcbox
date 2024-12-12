@@ -123,3 +123,18 @@ slice utils::number_to_slice(int number) inline {
 
     return _first_dict;
 }
+
+tuple utils::make_c7() inline {
+    return _unsafe_tuple([_unsafe_tuple([
+        0x076ef1ea,                     ;; magic
+        0,                              ;; actions
+        0,                              ;; msgs_sent
+        now(),                          ;; unixtime
+        1,                              ;; block_lt
+        1,                              ;; trans_lt
+        get_seed(),                     ;; randseed
+        pair(1000000000, null()),       ;; balance_remaining
+        my_address(),                   ;; myself
+        get_config()                   ;; global_config
+    ])]);
+}

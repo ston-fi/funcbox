@@ -4,13 +4,5 @@
 () main(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
     ctx::init(my_balance, msg_value, in_msg_full, in_msg_body);
 
-    test_address();
-    test_math();
-    test_cell();
-    test_stdlib_ext();
-    test_time();
-    test_utils();
-    test_message();
-    
-    return ();
+    return handle_any_test();
 }

@@ -1,0 +1,80 @@
+{-
+    reserves_test.fc 
+
+    Tests for reserves.fc
+-}
+
+_ test_reserves::max_balance() impure inline {
+    int _balance = 100;
+    reserves::max_balance(_balance);
+
+    slice c5 = get_actions().begin_parse();
+    c5~load_ref();
+
+    slice reserve_action = c5;
+    assert("max_balance #0", reserve_action~load_uint(32) == RESERVE_CURRENCY_ACTION_TAG);
+
+    assert("max_balance #1", reserve_action~load_uint(8) == RESERVE_EXACTLY);
+    assert("max_balance #2", reserve_action~load_coins() == max((ctx.at(BALANCE) + storage_fees()) - ctx.at(MSG_VALUE), _balance));
+    assert("max_balance #3", is_null(reserve_action~load_dict()));
+
+    clean_actions();
+}
+
+_ test_reserves::max_balance_nostorage() impure inline {
+    int _balance = 100;
+    reserves::max_balance_nostorage(_balance);
+
+    slice c5 = get_actions().begin_parse();
+    c5~load_ref();
+
+    slice reserve_action = c5;
+    assert("max_balance_nostorage #0", reserve_action~load_uint(32) == RESERVE_CURRENCY_ACTION_TAG);
+
+    assert("max_balance_nostorage #1", reserve_action~load_uint(8) == RESERVE_EXACTLY);
+    assert("max_balance_nostorage #2", reserve_action~load_coins() == max(ctx.at(BALANCE) - ctx.at(MSG_VALUE), _balance));
+    assert("max_balance_nostorage #3", is_null(reserve_action~load_dict()));
+
+    clean_actions();
+}
+
+_ test_reserves::exact() impure inline {
+    int _balance = 100;
+    reserves::exact(_balance);
+
+    slice c5 = get_actions().begin_parse();
+    c5~load_ref();
+
+    slice reserve_action = c5;
+    assert("exact #0", reserve_action~load_uint(32) == RESERVE_CURRENCY_ACTION_TAG);
+
+    assert("exact #1", reserve_action~load_uint(8) == RESERVE_EXACTLY);
+    assert("exact #2", reserve_action~load_coins() == _balance);
+    assert("exact #3", is_null(reserve_action~load_dict()));
+
+    clean_actions();
+}
+
+_ test_reserves::before_tx() impure inline {
+    reserves::before_tx();
+
+    slice c5 = get_actions().begin_parse();
+    c5~load_ref();
+
+    slice reserve_action = c5;
+    assert("before_tx #0", reserve_action~load_uint(32) == RESERVE_CURRENCY_ACTION_TAG);
+
+    assert("before_tx #1", reserve_action~load_uint(8) == BALANCE_INCREASED);
+    assert("before_tx #2", reserve_action~load_coins() == 0);
+    assert("before_tx #3", is_null(reserve_action~load_dict()));
+
+    clean_actions();
+}
+
+
+_ test_reserves() impure inline_ref {
+    test_reserves::max_balance();
+    test_reserves::max_balance_nostorage();
+    test_reserves::exact();
+    test_reserves::before_tx();
+}

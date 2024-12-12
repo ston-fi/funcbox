@@ -20,6 +20,7 @@ _ test_utils::number_to_slice() impure inline {
     assert("number_to_slice #0", equal_slices(utils::number_to_slice(0), "0"));
     assert("number_to_slice #1", equal_slices(utils::number_to_slice(10), "10"));
     assert("number_to_slice #2", equal_slices(utils::number_to_slice(-10), "-10"));
+    assert("number_to_slice #3", equal_slices(utils::number_to_slice(-0), "0"));
 }
 
 _ test_utils::merge_dicts() impure inline {
@@ -33,10 +34,42 @@ _ test_utils::merge_dicts() impure inline {
     assert("merge_dicts #2", equal_cells(utils::merge_dicts(dict3, dict1, 256), dict3));
     assert("merge_dicts #3", ~ equal_cells(utils::merge_dicts(dict1, dict2, 256), dict4));
     assert("merge_dicts #4", ~ equal_cells(utils::merge_dicts(dict4, dict2, 256), dict4));
+    assert("merge_dicts #5", equal_cells(utils::merge_dicts(new_dict(), dict1, 256), dict1));
+    assert("merge_dicts #6", equal_cells(utils::merge_dicts(dict1, new_dict(), 256), dict1));
+}
+
+_ test_utils::to_coins() impure inline {
+    assert("to_coins #0", utils::to_coins(0) == 0);
+    assert("to_coins #1", utils::to_coins(1) == 1000000000);
+    assert("to_coins #2", utils::to_coins(1000000000) == 1000000000000000000);
+}
+
+_ test_utils::send_excesses() impure inline {
+    ;; Assertion is done in Sandbox environment
+    utils::send_excesses(0, ctx.at(SENDER), QCARRY_REMAINING_GAS);
+}
+
+_ test_utils::make_c7() impure inline {
+    tuple c7 = utils::make_c7();
+    tuple stack = c7.at(0);
+
+    assert("make_c7 #0", stack.at(0) == 0x076ef1ea);
+    assert("make_c7 #1", stack.at(1) == 0);
+    assert("make_c7 #2", stack.at(2) == 0);
+    assert("make_c7 #3", stack.at(3) == now());
+    assert("make_c7 #4", stack.at(4) == 1);
+    assert("make_c7 #5", stack.at(5) == 1);
+    assert("make_c7 #6", stack.at(6) == get_seed());
+    assert("make_c7 #7", stack.at(7).at(0) == 1000000000 & is_null(stack.at(7).at(1)));
+    assert("make_c7 #8", equal_slices(stack.at(8), my_address()));
+    assert("make_c7 #9", equal_cells(stack.at(9), get_config()));
 }
 
 _ test_utils() impure inline_ref {
     test_utils::address_to_hex_string();
     test_utils::number_to_slice(); 
     test_utils::merge_dicts();
+    test_utils::to_coins();
+    test_utils::send_excesses();
+    test_utils::make_c7();
 }

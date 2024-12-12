@@ -6,3 +6,33 @@
 #include "../time_test.fc";
 #include "../math/math_test.fc";
 #include "../message_test.fc";
+#include "../ctx_test.fc";
+#include "../dict_test.fc";
+#include "../actions_test.fc";
+#include "../reserves_test.fc";
+
+() handle_any_test() impure inline {
+  int op = ctx.at(OPCODE);
+
+  if (op == "test_address"c) { return test_address(); }
+
+  if (op == "test_cell"c) { return test_cell(); }
+
+  if (op == "test_utils"c) {  return test_utils(); }
+
+  if (op == "test_math"c) { return test_math(); }
+
+  if (op == "test_message"c) { return test_message(); }
+
+  if (op == "test_ctx"c) { return test_ctx(); }
+
+  if (op == "test_stdlib_ext"c) { return test_stdlib_ext(); }
+
+  if (op == "test_time"c) { return test_time(); }
+
+  if (op == "test_dict"c) { return test_dict(); }
+
+  if (op == "test_actions"c) { return test_actions(); }
+
+  if (op == "test_reserves"c) { return test_reserves(); }
+}

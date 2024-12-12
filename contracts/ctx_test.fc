@@ -1,0 +1,32 @@
+{-
+    cell_test.fc 
+
+    Tests for ctx.fc
+-}
+
+() test_ctx() impure inline_ref {
+    int is_bounced = ctx.at(IS_BOUNCED);
+    slice sender = ctx.at(SENDER);
+    int fwd_fee = ctx.at(FWD_FEE);
+    int query_id = ctx.at(QUERY_ID);
+    int balance = ctx.at(BALANCE);
+    int msg_value = ctx.at(MSG_VALUE);
+    slice msg_body_no_op_query_id = ctx.at(BODY);
+    cell raw_msg = ctx.at(RAW_MSG);
+
+    var msg = begin_cell()
+            .store_uint(SEND_MSG_NON_BOUNCEABLE, 6)
+            .store_slice(sender)
+            .store_coins(0)
+            .store_uint(1, 107)
+            .store_ref(begin_cell()
+                .store_uint("test_ctx_ok"c, 32)
+                .store_uint(query_id, 64)
+                .store_coins(msg_value)
+                .store_ref(begin_cell().store_slice(msg_body_no_op_query_id).end_cell())
+                .store_ref(raw_msg)
+                .end_cell())
+            .end_cell();
+
+    send_raw_message(msg, QCARRY_REMAINING_GAS);
+}
