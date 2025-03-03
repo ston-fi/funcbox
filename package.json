@@ -1,6 +1,6 @@
 {
   "name": "@ston-fi/funcbox",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Collection of FunC snippets/utilities",
   "license": "MIT",
   "scripts": {

@@ -126,15 +126,49 @@ slice utils::number_to_slice(int number) inline {
 
 tuple utils::make_c7() inline {
     return _unsafe_tuple([_unsafe_tuple([
-        0x076ef1ea,                     ;; magic
-        0,                              ;; actions
-        0,                              ;; msgs_sent
-        now(),                          ;; unixtime
-        1,                              ;; block_lt
-        1,                              ;; trans_lt
-        get_seed(),                     ;; randseed
-        pair(1000000000, null()),       ;; balance_remaining
-        my_address(),                   ;; myself
-        get_config()                   ;; global_config
-    ])]);
+                    0x076ef1ea,                     ;; magic
+                    0,                              ;; actions
+                    0,                              ;; msgs_sent
+                    now(),                          ;; unixtime
+                    1,                              ;; block_lt
+                    1,                              ;; trans_lt
+                    get_seed(),                     ;; randseed
+                    pair(1000000000, null()),       ;; balance_remaining
+                    my_address(),                   ;; myself
+                    get_config()                   ;; global_config
+                ])]);
+}
+
+int utils::calc_account_hash(cell code, cell data) inline {
+    return begin_cell()
+        .store_uint(
+            ;; refs_descriptor: ref_count + ((exotic? & 1) * 8) + (mask * 32)
+            ;;                  2 refs (code + data), non-exotic, zero-mask
+            (2 << 16)
+            ;; bits_descriptor: floor (bit_count / 8) + ceil(bit_count, 8)
+            ;;                  floor (5 bits / 8) + ceil(5 bits / 8) = 0 + 1 = 1
+            | (1 << 8)
+            ;; data: [0b00110] + [0b100] = [0b00110100] = 0x34 (data + augmented bits)
+            ;;       0b00110 - data (split_depth, special, code, data, library)
+            ;;       0b100 - augmented bits (leading 1 + zeroes to make section multiple of eight)
+            | 0x34,
+            24
+        )
+        .store_uint(code.cell_depth(), 16)
+        .store_uint(data.cell_depth(), 16)
+        .store_uint(code.cell_hash(), 256)
+        .store_uint(data.cell_hash(), 256)
+        .sha256_singleb();
+}
+
+;; 0b100 = addr_std$10 tag; No anycast
+;; 8 zero bits for basechain workchain
+const slice basechain_address_slice_magic = "801_"s;
+
+slice utils::basechain_address_from_account_hash(int ac_hash) inline {
+    return begin_cell().store_slice(basechain_address_slice_magic).store_uint(ac_hash, 256).end_cell().begin_parse();
+}
+
+slice utils::basechain_address_from_code_and_data(cell code, cell data) inline {
+    return utils::basechain_address_from_account_hash(utils::calc_account_hash(code, data));
 }

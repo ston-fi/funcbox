@@ -45,3 +45,13 @@
     return ([_code?, _data?, _state_init?, _addr?], _addr?);
 }
 
+
+([cell, cell, cell, slice], slice) basechain_address([cell, cell, cell, slice] cntr) inline {
+    [cell _code?, cell _data?, cell _state_init?, slice _addr?] = cntr; 
+
+    if _addr?.null?() {
+        _addr? = utils::basechain_address_from_code_and_data(_code?, _data?);
+    }
+
+    return ([_code?, _data?, _state_init?, _addr?], _addr?);
+}

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.8] – 2025-03-03
+
+### Added
+
+– Add new `utils::calc_account_hash`, `utils::basechain_address_from_account_hash` and `utils::basechain_address_from_code_and_data` helpers for optimized basechain address calculation
+– Add `contracts.basechain_address` method for optimized basechain address calculation
+
 ## [0.1.7] - 2024-12-12
 
 ### Added
@@ -222,6 +229,7 @@
 
 - Add initial library release
 
+[0.1.8]: https://github.com/ston-fi/funcbox/tree/v0.1.8
 [0.1.7]: https://github.com/ston-fi/funcbox/tree/v0.1.7
 [0.1.0]: https://github.com/ston-fi/funcbox/tree/v0.1.0
 [0.0.15]: https://github.com/ston-fi/funcbox/tree/v0.0.15

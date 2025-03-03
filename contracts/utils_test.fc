@@ -65,6 +65,36 @@ _ test_utils::make_c7() impure inline {
     assert("make_c7 #9", equal_cells(stack.at(9), get_config()));
 }
 
+cell pack_state_init(cell code, cell data) inline {
+    return begin_cell()
+        .store_uint(0, 1 + 1)
+        .store_dict(code)
+        .store_dict(data)
+        .store_uint(0, 1)
+        .end_cell();
+}
+
+slice calc_address_simple(cell code, cell data, int workchain) inline {
+    return begin_cell().store_uint(4, 3)
+            .store_int(workchain, 8)
+            .store_uint(cell_hash(pack_state_init(code, data)), 256)
+        .as_slice();
+}
+
+_ test_utils::calc_account_hash() impure inline {
+    cell code = my_code();
+    cell data = begin_cell().store_uint(123, 8).store_uint(456, 256).end_cell();
+
+    assert("calc_account_hash #0", cell_hash(pack_state_init(code, data)) == utils::calc_account_hash(code, data));
+}
+
+_ test_utils::basechain_address_from_code_and_data() impure inline {
+    cell code = my_code();
+    cell data = begin_cell().store_uint(123, 8).store_uint(456, 256).end_cell();
+
+    assert("basechain_address_from_code_and_data #0", equal_slices(calc_address_simple(code, data, 0), utils::basechain_address_from_code_and_data(code, data)));
+}
+
 _ test_utils() impure inline_ref {
     test_utils::address_to_hex_string();
     test_utils::number_to_slice(); 
@@ -72,4 +102,6 @@ _ test_utils() impure inline_ref {
     test_utils::to_coins();
     test_utils::send_excesses();
     test_utils::make_c7();
+    test_utils::calc_account_hash();
+    test_utils::basechain_address_from_code_and_data();
 }

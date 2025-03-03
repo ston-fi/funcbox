@@ -81,6 +81,7 @@ int storage_fees() asm "STORAGEFEES";
 (int) get_global_id() asm "GLOBALID";
 (int) get_gas_consumed() asm "GASCONSUMED";
 (int) sha256_single(slice _t0) asm "1 PUSHINT HASHEXT_SHA256";
+(int) sha256_singleb(builder _t0) asm "1 PUSHINT HASHEXT_SHA256";
 (int) sha256_double(slice _t0, slice _t1) asm "2 PUSHINT HASHEXT_SHA256";
 (int) sha256_triple(slice _t0, slice _t1, slice _t2) asm "3 PUSHINT HASHEXT_SHA256";
 (int) sha512_single(slice _t0) asm "1 PUSHINT HASHEXT_SHA512";
