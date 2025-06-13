@@ -1,0 +1,190 @@
+{-
+    shard_test.fc 
+
+    Tests for shard.fc
+-}
+
+_ test_shard::pack_prefixed_state_init() impure inline {
+    cell code = my_code();
+    cell data = begin_cell().store_uint(123, 8).store_uint(456, 256).end_cell();
+
+    cell expected_cell = begin_cell()
+        .store_uint(1, 1) ;; fixed_prefix_length: true
+        .store_uint(8, 5) ;; prefixLength: uint5
+        .store_uint(0, 1) ;; special: false
+        .store_uint(1, 1) ;; code: true
+        .store_uint(1, 1) ;; data: true
+        .store_uint(0, 1) ;; library: false
+        .store_ref(code).store_ref(data).end_cell();
+
+    cell actual_cell = shard_utils::pack_prefixed_state_init(code, data);
+
+    assert("pack_prefixed_state_init #0", equal_cells(expected_cell, actual_cell));
+}
+
+_ test_shard::calc_account_hash_with_prefix() impure inline {
+    cell code = my_code();
+    cell data = begin_cell().store_uint(123, 8).store_uint(456, 256).end_cell();
+
+    int expected_hash = cell_hash(shard_utils::pack_prefixed_state_init(code, data));
+    int actual_hash = shard_utils::calc_account_hash(code, data);
+
+    assert("calc_account_hash_with_prefix #0", expected_hash == actual_hash);
+}
+
+_ test_shard::change_hash_shard() impure inline {
+    ;; Start with hash that has shard 5
+    int original_hash = (5 << (256 - 8)) | 0x123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF;
+    
+    ;; Change shard to 10
+    int modified_hash = shard_utils::change_hash_shard(original_hash, 10);
+    
+    ;; Verify the shard changed
+    int new_shard = shard_utils::get_shard_from_hash(modified_hash);
+    assert("change_hash_shard #0", new_shard == 10);
+    
+    ;; Verify the low bits remain unchanged
+    int original_low_bits = extract_low_bits(original_hash, 256 - 8);
+    int modified_low_bits = extract_low_bits(modified_hash, 256 - 8);
+    assert("change_hash_shard #1", original_low_bits == modified_low_bits);
+
+    ;; Test changing shard 0 to shard 255
+    int hash_shard_0 = 0x123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF;
+    int hash_shard_255 = shard_utils::change_hash_shard(hash_shard_0, 255);
+    int shard_255 = shard_utils::get_shard_from_hash(hash_shard_255);
+    assert("change_hash_shard #2", shard_255 == 255);
+}
+
+_ test_shard::hashes_in_same_shard() impure inline {
+    ;; Create two hashes with same shard (77)
+    int hash_a = (77 << (256 - 8)) | 0x111111111111111111111111111111111111111111111111111111111111111;
+    int hash_b = (77 << (256 - 8)) | 0x999999999999999999999999999999999999999999999999999999999999999;
+    
+    int same_shard = shard_utils::hashes_in_same_shard(hash_a, hash_b);
+    assert("hashes_in_same_shard #0", same_shard);
+
+    ;; Create two hashes with different shards
+    int hash_c = (77 << (256 - 8)) | 0x222222222222222222222222222222222222222222222222222222222222222;
+    int hash_d = (133 << (256 - 8)) | 0x333333333333333333333333333333333333333333333333333333333333333;
+    
+    int different_shard = shard_utils::hashes_in_same_shard(hash_c, hash_d);
+    assert("hashes_in_same_shard #1", ~ different_shard);
+
+    ;; Test with small values (both should have shard 0)
+    int small_hash_a = 12345;
+    int small_hash_b = 67890;
+    
+    int both_zero_shard = shard_utils::hashes_in_same_shard(small_hash_a, small_hash_b);
+    assert("hashes_in_same_shard #2", both_zero_shard);
+}
+
+_ test_shard::get_shard_from_address() impure inline {
+    ;; Create an address with shard 7 in the hash part
+    int hash_with_shard_7 = (7 << (256 - 8)) | 0x0034567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF;
+    slice addr_with_shard_7 = utils::basechain_address_from_account_hash(hash_with_shard_7);
+    
+    int shard = shard_utils::get_shard_from_address(addr_with_shard_7);
+    assert("get_shard_from_address #0", shard == 7);
+
+    ;; Create an address with shard 0
+    int hash_with_shard_0 = 0x0034567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF;
+    slice addr_with_shard_0 = utils::basechain_address_from_account_hash(hash_with_shard_0);
+    
+    shard = shard_utils::get_shard_from_address(addr_with_shard_0);
+    assert("get_shard_from_address #1", shard == 0);
+
+    ;; Create an address with shard 128 (0b10000000)
+    int hash_with_shard_128 = (128 << (256 - 8)) | 0x00DCBA0987654321FEDCBA0987654321FEDCBA0987654321FEDCBA0987654321;
+    slice addr_with_shard_128 = utils::basechain_address_from_account_hash(hash_with_shard_128);
+    
+    shard = shard_utils::get_shard_from_address(addr_with_shard_128);
+    assert("get_shard_from_address #2", shard == 128);
+}
+
+_ test_shard::change_address_shard() impure inline {
+    ;; Create original address with shard 3
+    int original_hash = (3 << (256 - 8)) | 0x0034567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF;
+    slice original_addr = utils::basechain_address_from_account_hash(original_hash);
+    
+    ;; Change shard to 15
+    slice modified_addr = shard_utils::change_address_shard(original_addr, 15);
+    
+    ;; Verify the shard changed
+    int new_shard = shard_utils::get_shard_from_address(modified_addr);
+    assert("change_address_shard #0", new_shard == 15);
+    
+    ;; Verify the address format is still correct (first 11 bits should be 0x400)
+    int magic_bits = modified_addr.preload_uint(11);
+    assert("change_address_shard #1", magic_bits == 0x400); ;; 0b10000000000 = 0x400
+
+    ;; Test changing from shard 255 to shard 0
+    int hash_shard_255 = (255 << (256 - 8)) | 0x00DCBA0987654321FEDCBA0987654321FEDCBA0987654321FEDCBA0987654321;
+    slice addr_shard_255 = utils::basechain_address_from_account_hash(hash_shard_255);
+    slice addr_shard_0 = shard_utils::change_address_shard(addr_shard_255, 0);
+    int shard_0 = shard_utils::get_shard_from_address(addr_shard_0);
+    assert("change_address_shard #2", shard_0 == 0);
+}
+
+_ test_shard::addresses_in_same_shard() impure inline {
+    ;; Create two addresses with same shard (42)
+    int hash_a = (42 << (256 - 8)) | 0x0011111111111111111111111111111111111111111111111111111111111111;
+    int hash_b = (42 << (256 - 8)) | 0x0099999999999999999999999999999999999999999999999999999999999999;
+    slice addr_a = utils::basechain_address_from_account_hash(hash_a);
+    slice addr_b = utils::basechain_address_from_account_hash(hash_b);
+    
+    int same_shard = shard_utils::addresses_in_same_shard(addr_a, addr_b);
+    assert("addresses_in_same_shard #0", same_shard);
+
+    ;; Create two addresses with different shards
+    int hash_c = (42 << (256 - 8)) | 0x0022222222222222222222222222222222222222222222222222222222222222;
+    int hash_d = (99 << (256 - 8)) | 0x0033333333333333333333333333333333333333333333333333333333333333;
+    slice addr_c = utils::basechain_address_from_account_hash(hash_c);
+    slice addr_d = utils::basechain_address_from_account_hash(hash_d);
+    
+    int different_shard = shard_utils::addresses_in_same_shard(addr_c, addr_d);
+    assert("addresses_in_same_shard #1", ~ different_shard);
+
+    ;; Test with shard 0 and shard 0
+    int hash_e = 0x0044444444444444444444444444444444444444444444444444444444444444;
+    int hash_f = 0x0055555555555555555555555555555555555555555555555555555555555555;
+    slice addr_e = utils::basechain_address_from_account_hash(hash_e);
+    slice addr_f = utils::basechain_address_from_account_hash(hash_f);
+    
+    int both_zero_shard = shard_utils::addresses_in_same_shard(addr_e, addr_f);
+    assert("addresses_in_same_shard #2", both_zero_shard);
+}
+
+_ test_shard::get_shard_from_hash() impure inline {
+    ;; Test with hash that has shard 5 (0b00000101) in high 8 bits
+    int hash_with_shard_5 = (5 << (256 - 8)); ;; Put 5 in the highest 8 bits
+    int shard = shard_utils::get_shard_from_hash(hash_with_shard_5);
+    assert("get_shard_from_hash #0", shard == 5);
+
+    ;; Test with hash that has shard 255 (0b11111111) in high 8 bits
+    int hash_with_shard_255 = (255 << (256 - 8));
+    shard = shard_utils::get_shard_from_hash(hash_with_shard_255);
+    assert("get_shard_from_hash #1", shard == 255);
+
+    ;; Test with small hash (should have shard 0)
+    int small_hash = 12345;
+    shard = shard_utils::get_shard_from_hash(small_hash);
+    assert("get_shard_from_hash #2", shard == 0);
+
+    ;; Test with hash that has mixed bits
+    int low_248_bits = extract_low_bits(0x123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF, 256 - 8);
+    int mixed_hash = (42 << (256 - 8)) | low_248_bits;
+    shard = shard_utils::get_shard_from_hash(mixed_hash);
+    assert("get_shard_from_hash #3", shard == 42);
+}
+
+
+_ test_shard() impure inline_ref {
+    test_shard::pack_prefixed_state_init();
+    test_shard::calc_account_hash_with_prefix();
+    test_shard::change_hash_shard();
+    test_shard::hashes_in_same_shard();
+    test_shard::get_shard_from_hash();
+    test_shard::get_shard_from_address();
+    test_shard::change_address_shard();
+    test_shard::addresses_in_same_shard();
+}

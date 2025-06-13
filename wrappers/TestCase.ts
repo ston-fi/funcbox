@@ -110,4 +110,12 @@ export class TestCase implements Contract {
             body: beginCell().storeUint(crc32('test_reserves'), 32).storeUint(0, 64).endCell(),
         });
     }
+
+    async sendTestShard(provider: ContractProvider, via: Sender, value: bigint) {
+        return provider.internal(via, {
+            value,
+            sendMode: SendMode.PAY_GAS_SEPARATELY,
+            body: beginCell().storeUint(crc32('test_shard'), 32).storeUint(0, 64).endCell(),
+        });
+    }
 }

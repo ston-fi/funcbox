@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.1.9] – 2025-06-13
+
+### Added
+
+- Add new `shard_utils` library for TVM global version 10 sharding prefix length logic
+- Add `shard_utils::get_shard_from_hash` function to extract shard from hash values
+- Add `shard_utils::get_shard_from_address` function to extract shard from addresses
+- Add `shard_utils::change_hash_shard` function to modify shard bits in address hash part
+- Add `shard_utils::change_address_shard` function to modify shard bits in address hash part
+- Add `shard_utils::addresses_in_same_shard` function to compare address shards
+- Add `shard_utils::hashes_in_same_shard` function to compare address hash part shards
+- Add `shard_utils::pack_prefixed_state_init` function for creating state init with fixed prefix scheme
+- Add `shard_utils::calc_account_hash` function for optimized fixed prefix account hash calculation
+- Add comprehensive test suite for shard utilities in `shard_test.fc`
+- Add `extract_low_bits` fift-asm helper
+
 ## [0.1.8] – 2025-03-03
 
 ### Added

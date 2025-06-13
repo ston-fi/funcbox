@@ -10,6 +10,7 @@
 #include "../dict_test.fc";
 #include "../actions_test.fc";
 #include "../reserves_test.fc";
+#include "../shard_test.fc";
 
 () handle_any_test() impure inline {
   int op = ctx.at(OPCODE);
@@ -35,4 +36,6 @@
   if (op == "test_actions"c) { return test_actions(); }
 
   if (op == "test_reserves"c) { return test_reserves(); }
+
+  if (op == "test_shard"c) { return test_shard(); }
 }

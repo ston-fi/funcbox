@@ -135,3 +135,5 @@ int get_ton_balance() asm "BALANCE FIRST";
 cell get_actions() impure asm "c5 PUSH";
 
 cell get_config() asm "CONFIGROOT";
+
+int extract_low_bits(int value, int count) asm "MODPOW2";

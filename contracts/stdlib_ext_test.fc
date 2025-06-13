@@ -81,6 +81,17 @@ _ test_stdlib_ext::actions() impure inline {
     assert("actions #10", equal_cells(get_actions(), empty_cell()));
 }
 
+_ test_stdlib_ext::extract_low_bits() impure inline {
+    assert("extract_low_bits #0", extract_low_bits(0, 8) == 0);
+    assert("extract_low_bits #1", extract_low_bits(255, 8) == 255);
+    assert("extract_low_bits #2", extract_low_bits(256, 8) == 0);
+    assert("extract_low_bits #3", extract_low_bits(0xABCDEF12, 16) == 0xEF12);
+    assert("extract_low_bits #4", extract_low_bits(-1, 8) == 255);
+    
+    int max_int = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
+    assert("extract_low_bits #5", extract_low_bits(max_int, 256 - 123) == (1 << (256 - 123)) - 1);
+}
+
 _ test_stdlib_ext() impure inline_ref {
     test_stdlib_ext::begin_message();
     test_stdlib_ext::store_status(); 
@@ -91,4 +102,5 @@ _ test_stdlib_ext() impure inline_ref {
     test_stdlib_ext::get_forward_fee();
     test_stdlib_ext::get_compute_fee();
     test_stdlib_ext::actions();
+    test_stdlib_ext::extract_low_bits();
 }

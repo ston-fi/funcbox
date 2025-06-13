@@ -149,4 +149,8 @@ describe('FunCBox', () => {
     it('reserves_test.fc', async () => {
         assertMsgSuite(await testCase.sendTestReserves(sender.getSender(), toNano('1')));
     });
+
+    it('shard_test.fc', async () => {
+        assertMsgSuite(await testCase.sendTestShard(sender.getSender(), toNano('1')));
+    });
 });

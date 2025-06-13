@@ -1,0 +1,60 @@
+const int __FIXED_PREFIX_LENGTH = 8;
+
+cell shard_utils::pack_prefixed_state_init(cell code, cell data) inline {
+    return begin_cell()
+    ;; fixed_prefix_length: true, prefixLength: uint5, special: false, code: true, data: true, library: false 
+        .store_uint(((32 + __FIXED_PREFIX_LENGTH) << 4) | 6, 10)
+        .store_ref(code)
+        .store_ref(data)
+        .end_cell();
+}
+
+int shard_utils::calc_account_hash(cell code, cell data) inline {
+    return begin_cell()
+    ;; d1 byte: r + 8s + 32l = 2 + 0 + 0 = 2
+    ;; d2 byte: floor(b/8) + ceil(b/8) = floor(10/8) + ceil(10/8) = 1 + 2 = 3
+    ;; Data bits (10 bits total) + padding (6 bits) = 16 bits total:
+    ;; 1 bit: Maybe=1 for fixed_prefix_length = 1
+    ;; 5 bits: fixed_prefix_length value
+    ;; 1 bit: Maybe=0 for special = 0
+    ;; 1 bit: Maybe=1 for code = 1
+    ;; 1 bit: Maybe=1 for data = 1
+    ;; 1 bit: Maybe=0 for library = 0
+    ;; 6 bits: Padding = 0x20 (leading 1 followed by zeros)
+    ;; Combined 32 bits: (0x0203 << 16) | (0x81A0 | (fixed_prefix_length << 10))
+    ;; = 0x02030000 | 0x81A0 | (fixed_prefix_length << 10)
+    ;; = 0x020381A0 | (fixed_prefix_length << 10)
+        .store_uint(0x020381A0 | (__FIXED_PREFIX_LENGTH << 10), 32)
+        .store_uint(code.cell_depth(), 16)
+        .store_uint(data.cell_depth(), 16)
+        .store_uint(code.cell_hash(), 256)
+        .store_uint(data.cell_hash(), 256)
+        .sha256_singleb();
+}
+
+int shard_utils::get_shard_from_hash(int hash) inline {
+    return hash >> (256 - __FIXED_PREFIX_LENGTH);
+}
+
+int shard_utils::get_shard_from_address(slice addr) inline {
+    addr~skip_bits(11); ;; addr_std$10, anycast: false, workchain: int8 
+    return addr~load_uint(__FIXED_PREFIX_LENGTH);
+}
+
+int shard_utils::change_hash_shard(int hash, int shard) inline {
+    return extract_low_bits(hash, 256 - __FIXED_PREFIX_LENGTH) | (shard << (256 - __FIXED_PREFIX_LENGTH));
+}
+
+slice shard_utils::change_address_shard(slice addr, int shard) inline {
+    var (prefix, hash) = (addr~load_uint(11), addr.preload_uint(256));
+    int new_hash = shard_utils::change_hash_shard(hash, shard);
+    return begin_cell().store_uint(prefix, 11).store_uint(new_hash, 256).as_slice();
+}
+
+int shard_utils::addresses_in_same_shard(slice address_a, slice address_b) inline {
+    return shard_utils::get_shard_from_address(address_a) == shard_utils::get_shard_from_address(address_b);
+}
+
+int shard_utils::hashes_in_same_shard(int hash_a, int hash_b) inline {
+    return shard_utils::get_shard_from_hash(hash_a) == shard_utils::get_shard_from_hash(hash_b);
+}
